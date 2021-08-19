@@ -8,6 +8,12 @@ ThemeData themeData = ThemeData(
   fontFamily: 'Poppins',
   dividerTheme: DividerThemeData(color: greyBgColor, thickness: 2.5),
   dividerColor: greyBgColor,
+  inputDecorationTheme: InputDecorationTheme(
+    border: OutlineInputBorder(
+        borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
+    filled: true,
+    fillColor: greyBgColor,
+  ),
   textTheme: const TextTheme(
     headline1: TextStyle(
       fontSize: 28,

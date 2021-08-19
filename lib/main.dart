@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pengo',
+      title: 'Penger',
       theme: themeData,
       home: const Splash(),
     );
