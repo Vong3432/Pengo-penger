@@ -1,8 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:penger/bloc/auth/auth_bloc.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/config/shadow.dart';
 import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
+import 'package:penger/splash.dart';
 import 'package:penger/ui/widgets/button/custom_button.dart';
 import 'package:penger/ui/widgets/input/custom_textfield.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
@@ -15,11 +20,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+
+  final _phoneValidator = MultiValidator([
+    RequiredValidator(errorText: 'Phone cannot be empty'),
+    MaxLengthValidator(10, errorText: 'Your phone is incorrect format')
+  ]);
+  final _passwordValidator = MultiValidator([
+    RequiredValidator(errorText: 'Password cannot be empty'),
+    MinLengthValidator(8, errorText: 'Minimum password length is 8')
+  ]);
+
+  final TextEditingController _phoneController =
+      TextEditingController(text: '0149250542');
+  final TextEditingController _passwordController =
+      TextEditingController(text: '12345678');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+        // physics: const NeverScrollableScrollPhysics(),
         slivers: <Widget>[
           CustomSliverBody(content: <Widget>[
             Container(
@@ -43,67 +64,114 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildContent(BuildContext context) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          color: whiteColor,
-          boxShadow: bottomBarShadow(Theme.of(context)),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(50),
-            topRight: Radius.circular(50),
+    return Form(
+      key: _formKey,
+      child: Expanded(
+        child: Container(
+          decoration: BoxDecoration(
+            color: whiteColor,
+            boxShadow: bottomBarShadow(Theme.of(context)),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(50),
+              topRight: Radius.circular(50),
+            ),
           ),
-        ),
-        padding: const EdgeInsets.all(18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const SizedBox(
-              height: SECTION_GAP_HEIGHT,
-            ),
-            const CustomTextField(
-              label: "Phone",
-              hintText: "012-3456789",
-            ),
-            const CustomTextField(
-              obsecureText: true,
-              label: "Password",
-              hintText: "Password",
-            ),
-            const SizedBox(
-              height: SECTION_GAP_HEIGHT * 2,
-            ),
-            CustomButton(
-              onPressed: () {
-                debugPrint("Login");
-              },
-              text: Text(
-                "Sign In",
-                style: PengoStyle.subtitle(context).copyWith(
-                  color: whiteColor,
-                ),
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(
+                height: SECTION_GAP_HEIGHT,
               ),
-            ),
-            const SizedBox(
-              height: SECTION_GAP_HEIGHT,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "Don't have an account? ",
-                  style: PengoStyle.subtitle(context),
-                ),
-                GestureDetector(
-                  child: Text(
-                    "Register here",
-                    style: PengoStyle.subtitle(context).copyWith(
-                      fontWeight: FontWeight.bold,
+              CustomTextField(
+                controller: _phoneController,
+                label: "Phone",
+                hintText: "0123456789",
+                validator: _phoneValidator,
+              ),
+              CustomTextField(
+                controller: _passwordController,
+                obsecureText: true,
+                label: "Password",
+                hintText: "Password",
+                validator: _passwordValidator,
+              ),
+              const SizedBox(
+                height: SECTION_GAP_HEIGHT * 2,
+              ),
+              BlocConsumer(
+                bloc: BlocProvider.of<AuthBloc>(context),
+                listener: (context, state) {
+                  debugPrint(state.toString());
+                  // TODO: implement listener        }
+                  if (state is AuthenticatedState) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("You're logged in! Redirecting..."),
+                        backgroundColor: primaryColor,
+                      ),
+                    );
+                    Future.delayed(const Duration(seconds: 2)).then((_) => {
+                          Navigator.of(context).pushReplacement(
+                              CupertinoPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const Splash()))
+                        });
+                  }
+                  if (state is NotAuthenticatedState) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Authentication fail.'),
+                        backgroundColor: dangerColor,
+                      ),
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  if (state is AuthenticatingState) {
+                    return const CircularProgressIndicator();
+                  }
+                  return CustomButton(
+                    onPressed: () {
+                      debugPrint("Login");
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        debugPrint("logging");
+                        BlocProvider.of<AuthBloc>(context).add(LoginEvent(
+                            _phoneController.text, _passwordController.text));
+                      }
+                    },
+                    text: Text(
+                      "Sign In",
+                      style: PengoStyle.subtitle(context).copyWith(
+                        color: whiteColor,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(
+                height: SECTION_GAP_HEIGHT,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Don't have an account? ",
+                    style: PengoStyle.subtitle(context),
+                  ),
+                  GestureDetector(
+                    child: Text(
+                      "Register here",
+                      style: PengoStyle.subtitle(context).copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

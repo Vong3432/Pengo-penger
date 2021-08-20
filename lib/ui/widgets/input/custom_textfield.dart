@@ -12,6 +12,8 @@ class CustomTextField extends StatelessWidget {
     this.readOnly,
     this.inputType,
     this.inputAction,
+    this.validator,
+    this.controller,
   }) : super(key: key);
 
   final String label;
@@ -21,6 +23,8 @@ class CustomTextField extends StatelessWidget {
   final bool? readOnly;
   final TextInputType? inputType;
   final TextInputAction? inputAction;
+  final String? Function(String?)? validator;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,9 @@ class CustomTextField extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        TextField(
+        TextFormField(
+          controller: controller,
+          validator: validator,
           obscureText: obsecureText ?? false,
           onChanged: onChanged,
           readOnly: readOnly ?? false,

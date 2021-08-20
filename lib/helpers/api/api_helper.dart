@@ -32,14 +32,14 @@ class ApiHelper {
   }
 
   Future<Response<Map<String, dynamic>>> post(String url,
-      {dynamic data,
+      {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
       Options? options,
       CancelToken? cancelToken,
       void Function(int, int)? onSendProgress,
       void Function(int, int)? onReceiveProgress}) async {
     return _dio.post(url,
-        data: data,
+        data: data != null ? FormData.fromMap(data) : null,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,

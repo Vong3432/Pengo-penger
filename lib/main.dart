@@ -22,10 +22,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Penger',
-      theme: themeData,
-      home: const Splash(),
+    return MultiBlocProvider(
+      providers: multiBlocProviders(context),
+      child: MaterialApp(
+        title: 'Penger',
+        theme: themeData,
+        home: const Splash(),
+      ),
     );
   }
 }
