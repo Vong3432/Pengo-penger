@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:penger/helpers/socket/socket_helper.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/ui/qr/qr_scanner_view.dart';
 import 'package:penger/ui/widgets/button/custom_button.dart';
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
+  SocketHelper socketHelper = SocketHelper();
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -39,6 +41,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    socketHelper.init();
   }
 
   @override
@@ -101,6 +104,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     controller?.dispose();
+    socketHelper.dispose();
     super.dispose();
   }
 }
