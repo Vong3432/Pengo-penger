@@ -1,16 +1,21 @@
-import 'dart:io';
-
+import 'package:checkbox_grouped/checkbox_grouped.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:penger/bloc/booking-categories/booking_category_bloc.dart';
+import 'package:penger/bloc/booking-items/booking_item_bloc.dart';
+import 'package:penger/config/color.dart';
+import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/socket/socket_helper.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
-import 'package:penger/ui/qr/qr_scanner_view.dart';
-import 'package:penger/ui/widgets/button/custom_button.dart';
+import 'package:penger/helpers/theme/theme_helper.dart';
+import 'package:penger/models/booking_category_model.dart';
+import 'package:penger/models/booking_item_model.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,28 +25,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
-  QRViewController? controller;
   SocketHelper socketHelper = SocketHelper();
 
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller!.resumeCamera();
-    }
-  }
+  // state
+  BookingCategory? _selectedCategory;
+  GroupController controller = GroupController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     socketHelper.init();
+    _loadCategories();
+  }
+
+  void _loadCategories() {
+    BlocProvider.of<BookingCategoryBloc>(context)
+        .add(FetchBookingCategoriesEvent());
+    BlocProvider.of<BookingItemBloc>(context).add(FetchBookingItemsEvent());
   }
 
   @override
@@ -74,14 +75,19 @@ class _HomePageState extends State<HomePage> {
                         debugPrint('Submitted text: $value');
                       },
                     ),
-                    CustomButton(
-                      text: Text("Scan"),
-                      onPressed: () {
-                        Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) => QRScannerPage(),
-                        ));
-                      },
+                    const SizedBox(
+                      height: SECTION_GAP_HEIGHT,
                     ),
+                    _buildCategories(context),
+                    _buildItems(context)
+                    // CustomButton(
+                    //   text: Text("Scan"),
+                    //   onPressed: () {
+                    //     Navigator.of(context).push(CupertinoPageRoute(
+                    //       builder: (context) => QRScannerPage(),
+                    //     ));
+                    //   },
+                    // ),
                   ],
                 ),
               ),
@@ -92,18 +98,92 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
+  BlocBuilder<BookingItemBloc, BookingItemState> _buildItems(
+      BuildContext context) {
+    return BlocBuilder(
+        bloc: BlocProvider.of<BookingItemBloc>(context),
+        builder: (BuildContext context, BookingItemState state) {
+          if (state is BookingItemsLoading) {
+            return GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 4),
+                itemCount: 6,
+                itemBuilder: (BuildContext context, int index) {
+                  return SkeletonText(
+                      height: mediaQuery(context).size.height / 2);
+                });
+          }
+          if (state is BookingItemsLoaded) {
+            return GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 4),
+                itemCount: state.items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final BookingItem item = state.items[index];
+                  return Text(item.title);
+                });
+          }
+          return Container();
+        });
+  }
+
+  BlocBuilder<BookingCategoryBloc, BookingCategoryState> _buildCategories(
+      BuildContext context) {
+    return BlocBuilder(
+      builder: (BuildContext context, BookingCategoryState state) {
+        if (state is BookingCategoriesLoading) {
+          return const SkeletonText(
+            height: 10,
+          );
+        }
+        if (state is BookingCategoriesLoaded) {
+          return SimpleGroupedChips<BookingCategory>(
+            controller: controller,
+            values: state.categories,
+            itemTitle: state.categories.map((e) => e.name).toList(),
+            chipGroupStyle: ChipGroupStyle.minimize(
+              backgroundColorItem: greyBgColor,
+              selectedColorItem: primaryColor,
+              itemTitleStyle: PengoStyle.caption(context),
+            ),
+          );
+          // return SizedBox(
+          //   height: 50,
+          //   child: ListView.separated(
+          //       separatorBuilder:
+          //           (BuildContext context, int index) {
+          //         return const SizedBox(
+          //           width: SECTION_GAP_HEIGHT,
+          //         );
+          //       },
+          //       scrollDirection: Axis.horizontal,
+          //       itemCount: state.categories.length,
+          //       itemBuilder: (BuildContext context, int index) {
+          //         final BookingCategory cat =
+          //             state.categories[index];
+          //         return ChoiceChip(
+          //             label: Text(cat.name),
+          //             onSelected: (bool v) {
+          //               setState(() {
+          //                 _selectedCategory = cat;
+          //               });
+          //             },
+          //             selected: _selectedCategory == cat);
+          //       }),
+          // );
+        }
+        return Container();
+      },
+      bloc: BlocProvider.of<BookingCategoryBloc>(context),
+    );
   }
 
   @override
   void dispose() {
-    controller?.dispose();
     socketHelper.dispose();
     super.dispose();
   }

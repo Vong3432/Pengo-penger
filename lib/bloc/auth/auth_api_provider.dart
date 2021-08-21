@@ -19,7 +19,6 @@ class AuthApiProvider {
         "password": password,
       });
       final auth = Auth.fromJson(response.data!['data']);
-
       return auth;
     } catch (e) {
       debugPrint(e.toString());

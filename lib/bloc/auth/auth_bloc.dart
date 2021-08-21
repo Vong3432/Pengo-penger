@@ -31,9 +31,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       yield AuthenticatingState();
       final Auth auth = await _authRepo.login(phone, password);
-      await SharedPreferencesHelper().setStr("user", auth.toString());
+      String encoded = jsonEncode(auth.toMap());
+      await SharedPreferencesHelper().setStr("user", encoded);
       yield AuthenticatedState();
-    } catch (_) {
+    } catch (e) {
+      debugPrint(e.toString());
       yield NotAuthenticatedState();
     }
   }

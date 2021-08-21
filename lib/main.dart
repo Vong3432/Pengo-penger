@@ -7,9 +7,11 @@ import 'package:penger/helpers/notification/push_notification_manager.dart';
 import 'package:penger/providers/multi_bloc_provider.dart';
 import 'package:penger/splash.dart';
 import 'package:flutter_config/flutter_config.dart';
+// import 'package:penger/main.mapper.g.dart' show initializeJsonMapper;
 
 // ignore: avoid_void_async
 void main() async {
+  // initializeJsonMapper();
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterConfig.loadEnvVariables();
   // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);

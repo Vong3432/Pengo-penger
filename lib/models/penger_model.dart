@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:penger/models/booking_item_model.dart';
 import 'package:penger/models/location_model.dart';
 import 'package:penger/models/review.dart';
@@ -11,10 +8,10 @@ class Penger {
       {required this.id,
       required this.name,
       required this.logo,
-      required this.items,
+      this.items,
       required this.description,
       required this.location,
-      required this.reviews});
+      this.reviews});
 
   factory Penger.fromJson(dynamic json) {
     var items =
@@ -36,6 +33,7 @@ class Penger {
       // reviews: reviewList,
       reviews: <Review>[
         Review(
+          id: 1,
           title: "Nice service",
           description:
               "This is the closest Switch to the hotel I am staying at and decided to go there despite the numerous poor reviews. Fortunately I was greeted by a lady sales staff when I entered the store that was enthusiastic and knowledgeable about the watch I wanted to purchase as she was wearing an Apple Watch herself.  Happy with my purchase and the good level of service I received.",
@@ -43,6 +41,7 @@ class Penger {
           date: "19 Aug 2021",
         ),
         Review(
+          id: 2,
           title: "Good service",
           description:
               """Bought an item online and did a store pick up on the same day. Kudos to them for willing to replace me the same item with a different design. What I didn't like was the multiple excuses they gave to prevent from swapping.""",
@@ -50,6 +49,7 @@ class Penger {
           date: "15 Aug 2021",
         ),
         Review(
+          id: 3,
           title: "The best service for customers experience. ",
           description:
               "Staff very helpful and served like professional. Recommended for everyone to buy Apple device at this store. Good job !",
@@ -57,6 +57,7 @@ class Penger {
           date: "7 July 2021",
         ),
         Review(
+          id: 4,
           title: "Nice service",
           description:
               "The best branch ever! Staff is super friendly and helpful all the time!",
@@ -67,13 +68,25 @@ class Penger {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    var map = new Map<String, dynamic>();
+    map["id"] = id;
+    map["name"] = name;
+    map["description"] = description;
+    map["logo"] = logo;
+    map["reviews"] = reviews?.map((Review e) => e.toMap()).toList();
+    map["items"] = items?.map((BookingItem e) => e.toMap()).toList();
+    // Add all other fields
+    return map;
+  }
+
   final int id;
   final String name;
   final String logo;
   final String? description;
   final Location location;
-  final List<Review> reviews;
-  final List<BookingItem> items;
+  final List<Review>? reviews;
+  final List<BookingItem>? items;
 }
 
 final List<Penger> pengersMockingData = <Penger>[
@@ -89,6 +102,7 @@ final List<Penger> pengersMockingData = <Penger>[
           street: "12, Jalan Eco Botanic"),
       reviews: <Review>[
         Review(
+          id: 9999,
           title: "Nice service",
           description: "The staff are very kind",
           user: userMockDataList[0],

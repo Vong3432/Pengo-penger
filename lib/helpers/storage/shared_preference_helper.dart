@@ -13,6 +13,7 @@ class SharedPreferencesHelper {
 
   Future<void> setStr(String key, String value) async {
     final SharedPreferences prefs = await _sp;
+
     prefs.setString(key, value);
   }
 

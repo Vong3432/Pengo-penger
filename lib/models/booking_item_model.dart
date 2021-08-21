@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class BookingItem {
   const BookingItem({
     required this.poster,
@@ -16,6 +18,17 @@ class BookingItem {
       title: json['name'].toString(),
       location: json['location'] != null ? json['location'].toString() : null,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    var map = new Map<String, dynamic>();
+    map["id"] = id;
+    map["is_active"] = isActive;
+    map["title"] = title;
+    map["poster"] = poster;
+    map["location"] = location;
+    // Add all other fields
+    return map;
   }
 
   final int id;

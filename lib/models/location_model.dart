@@ -14,6 +14,16 @@ class Location {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    var map = new Map<String, dynamic>();
+    map["location"] = location;
+    map["street"] = street;
+    map["lat"] = lat;
+    map["lng"] = lng;
+    // Add all other fields
+    return map;
+  }
+
   final String location;
   final String street;
   final double lat;
