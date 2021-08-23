@@ -46,6 +46,8 @@ class SocketHelper {
     }
   }
 
+  Socket get getSocket => socket;
+
   void dispose() {
     socket.dispose();
   }

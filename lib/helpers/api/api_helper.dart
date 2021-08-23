@@ -30,19 +30,20 @@ class ApiHelper {
         _dio.interceptors.requestLock.lock();
         final prefs = await _helper.getKey("user");
 
-        if (prefs == null) {
-          return handler.reject(
-              DioError(requestOptions: request, error: "Not authenticated"),
-              true);
-        }
-        final dynamic auth = jsonDecode(prefs);
+        if (prefs != null) {
+          // return handler.reject(
+          //     DioError(requestOptions: request, error: "Not authenticated"),
+          //     true);
+          final dynamic auth = jsonDecode(prefs);
 
-        request.headers["Authorization"] = "Bearer ${auth['token']}";
-        if (auth['selected_penger'] != null) {
-          request.queryParameters = {
-            "penger_id": auth['selected_penger']['id'].toString()
-          };
+          request.headers["Authorization"] = "Bearer ${auth['token']}";
+          if (auth['selected_penger'] != null) {
+            request.queryParameters = {
+              "penger_id": auth['selected_penger']['id'].toString()
+            };
+          }
         }
+
         _dio.interceptors.requestLock.unlock();
         handler.next(request);
       })

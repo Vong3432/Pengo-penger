@@ -8,6 +8,8 @@ ThemeData themeData = ThemeData(
   fontFamily: 'Poppins',
   dividerTheme: DividerThemeData(color: greyBgColor, thickness: 2.5),
   dividerColor: greyBgColor,
+  iconTheme: IconThemeData(color: textColor),
+  appBarTheme: AppBarTheme(iconTheme: IconThemeData(color: textColor)),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
         borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),

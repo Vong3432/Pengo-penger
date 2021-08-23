@@ -31,6 +31,7 @@ class BookingItemBloc extends Bloc<BookingItemEvent, BookingItemState> {
     try {
       yield BookingItemsLoading();
       final List<BookingItem> items = await _repo.fetchBookingItems();
+      await Future.delayed(const Duration(seconds: 1));
       yield BookingItemsLoaded(items);
     } catch (_) {
       yield BookingItemsNotLoaded();

@@ -1,12 +1,17 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:penger/config/color.dart';
+import 'package:penger/const/icon_const.dart';
 import 'package:penger/helpers/notification/push_notification_manager.dart';
 import 'package:penger/helpers/routes/route.dart';
 import 'package:penger/ui/coupon/coupon_view.dart';
 import 'package:penger/ui/home/home_view.dart';
 import 'package:penger/ui/notification/notification_view.dart';
 import 'package:penger/ui/profile/profile_view.dart';
+import 'package:penger/ui/qr/qr_scanner_view.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, this.idx}) : super(key: key);
@@ -91,28 +96,33 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       extendBody: true,
       body: PageStorage(bucket: bucket, child: currentScreen),
-      bottomNavigationBar: FloatingNavbar(
-        backgroundColor: textColor,
-        currentIndex: _selectedIndex,
-        selectedBackgroundColor: Colors.transparent,
-        borderRadius: 50,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        heroTag: "scan ",
+        onPressed: () {
+          Navigator.of(context).push(CupertinoPageRoute(
+            builder: (context) => QRScannerPage(),
+          ));
+        },
+        tooltip: 'Scan',
+        backgroundColor: whiteColor,
+        child: SvgPicture.asset(SCAN_ICON_PATH),
+      ),
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+        activeColor: primaryColor,
+        splashColor: greyBgColor,
+        elevation: 17,
+        backgroundColor: whiteColor,
+        activeIndex: _selectedIndex,
         iconSize: 27,
-        selectedItemColor: Colors.white,
         onTap: _onBottomNavItemTapped,
-        items: <FloatingNavbarItem>[
-          FloatingNavbarItem(
-            customWidget: navIcon(_selectedIndex == 0, Icons.home_outlined),
-          ),
-          FloatingNavbarItem(
-            customWidget: navIcon(_selectedIndex == 1, Icons.credit_card),
-          ),
-          FloatingNavbarItem(
-            customWidget:
-                navIcon(_selectedIndex == 2, Icons.calendar_today_outlined),
-          ),
-          FloatingNavbarItem(
-            customWidget: navIcon(_selectedIndex == 3, Icons.person_outlined),
-          ),
+        gapLocation: GapLocation.center,
+        notchSmoothness: NotchSmoothness.defaultEdge,
+        icons: const <IconData>[
+          Icons.home_outlined,
+          Icons.credit_card,
+          Icons.calendar_today_outlined,
+          Icons.person_outlined,
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -140,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Icon(
             icon,
             size: 27,
-            color: Colors.white,
+            color: textColor,
           ),
         ),
       ],

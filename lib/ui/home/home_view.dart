@@ -13,6 +13,7 @@ import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/booking_category_model.dart';
 import 'package:penger/models/booking_item_model.dart';
+import 'package:penger/ui/booking-item/add_item_view.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
@@ -25,8 +26,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  SocketHelper socketHelper = SocketHelper();
-
   // state
   BookingCategory? _selectedCategory;
   GroupController controller = GroupController();
@@ -35,7 +34,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    socketHelper.init();
     _loadCategories();
   }
 
@@ -49,6 +47,23 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 60.0),
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: FloatingActionButton(
+            heroTag: "add item",
+            backgroundColor: primaryColor,
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).push(
+                CupertinoPageRoute(builder: (context) => AddItemView()),
+              );
+            },
+            child: const Icon(Icons.add_outlined),
+          ),
+        ),
+      ),
       body: CustomScrollView(
         slivers: <Widget>[
           CustomSliverAppBar(
@@ -109,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                 shrinkWrap: true,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 4),
-                itemCount: 6,
+                itemCount: 4,
                 itemBuilder: (BuildContext context, int index) {
                   return SkeletonText(
                       height: mediaQuery(context).size.height / 2);
@@ -119,12 +134,44 @@ class _HomePageState extends State<HomePage> {
             return GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 4),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 4,
+                  childAspectRatio: MediaQuery.of(context).size.height / 1000,
+                ),
                 itemCount: state.items.length,
                 itemBuilder: (BuildContext context, int index) {
                   final BookingItem item = state.items[index];
-                  return Text(item.title);
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Image.network(
+                        item.poster,
+                        height: 160,
+                      ),
+                      Text(
+                        item.title,
+                        style: PengoStyle.caption(context),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          if (item.startFrom != null && item.endAt != null)
+                            Text(
+                              "${item.startFrom}-${item.endAt}",
+                              style: PengoStyle.captionNormal(context),
+                            ),
+                          if (item.availableFrom != null &&
+                              item.availableTo != null)
+                            Text(
+                              "${item.availableFrom}-${item.availableTo}",
+                              style: PengoStyle.smallerText(context),
+                            ),
+                        ],
+                      )
+                    ],
+                  );
                 });
           }
           return Container();
@@ -137,7 +184,7 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context, BookingCategoryState state) {
         if (state is BookingCategoriesLoading) {
           return const SkeletonText(
-            height: 10,
+            height: 25,
           );
         }
         if (state is BookingCategoriesLoaded) {
@@ -184,7 +231,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    socketHelper.dispose();
     super.dispose();
   }
 }

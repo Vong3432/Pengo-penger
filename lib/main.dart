@@ -6,8 +6,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:penger/config/theme.dart';
 import 'package:penger/helpers/notification/push_notification_manager.dart';
 import 'package:penger/providers/multi_bloc_provider.dart';
+import 'package:penger/providers/scan_pass_provider.dart';
 import 'package:penger/splash.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:provider/provider.dart';
 // import 'package:penger/main.mapper.g.dart' show initializeJsonMapper;
 
 // ignore: avoid_void_async
@@ -28,10 +30,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: multiBlocProviders(context),
-      child: MaterialApp(
-        title: 'Penger',
-        theme: themeData,
-        home: const Splash(),
+      child: MultiProvider(
+        providers: [ChangeNotifierProvider(create: (_) => ScanPassModel())],
+        child: MaterialApp(
+          title: 'Penger',
+          theme: themeData,
+          home: const Splash(),
+        ),
       ),
     );
   }
