@@ -264,7 +264,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
   @override
   void dispose() {
     controller?.dispose();
-    _socketHelper.dispose();
+    // _socketHelper.dispose();
     super.dispose();
   }
 }
