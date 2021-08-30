@@ -8,7 +8,6 @@ import 'package:penger/bloc/booking-categories/booking_category_bloc.dart';
 import 'package:penger/bloc/booking-items/booking_item_bloc.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/const/space_const.dart';
-import 'package:penger/helpers/socket/socket_helper.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/booking_category_model.dart';

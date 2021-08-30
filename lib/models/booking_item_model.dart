@@ -13,6 +13,16 @@ class BookingItem {
     this.availableTo,
     this.startFrom,
     this.endAt,
+    this.isPreserveable,
+    this.isTransferable,
+    this.isCountable,
+    this.isDiscountable,
+    this.maxTransfer,
+    this.maxBook,
+    this.preservedBook,
+    this.creditPoints,
+    this.quantity,
+    this.discountAmount,
   });
 
   factory BookingItem.fromJson(dynamic json) {
@@ -42,6 +52,17 @@ class BookingItem {
     map["title"] = title;
     map["poster"] = poster;
     map["location"] = location;
+    map["is_preservable"] = isPreserveable;
+    map["is_transferable"] = isTransferable;
+    map["is_countable"] = isCountable;
+    map["is_discountable"] = isDiscountable;
+    map["quantity"] = quantity;
+    map["discount_amount"] = discountAmount;
+    map["credit_points"] = creditPoints;
+    map["maximum_transfer"] = maxTransfer;
+    map["maximum_book"] = maxBook;
+    map["preserved_book"] = preservedBook;
+
     // Add all other fields
     return map;
   }
@@ -56,16 +77,14 @@ class BookingItem {
   final String? availableTo;
   final String? startFrom;
   final String? endAt;
+  final bool? isPreserveable;
+  final bool? isTransferable;
+  final bool? isCountable;
+  final bool? isDiscountable;
+  final int? maxTransfer;
+  final int? maxBook;
+  final int? preservedBook;
+  final int? creditPoints;
+  final int? quantity;
+  final double? discountAmount;
 }
-
-final List<BookingItem> bookingItemsMockData = <BookingItem>[
-  const BookingItem(
-    isActive: true,
-    id: 9999,
-    title: 'Durian Party Night',
-    location: 'Impian Emas',
-    price: 5.00,
-    poster:
-        "https://res.cloudinary.com/dpjso4bmh/image/upload/v1626869043/pengo/penger/logo/ie2lz02i7f5w6eqysvnm.png",
-  ),
-];

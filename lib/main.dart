@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:penger/config/theme.dart';
 import 'package:penger/helpers/notification/push_notification_manager.dart';
+import 'package:penger/models/providers/booking_item_model.dart';
 import 'package:penger/providers/multi_bloc_provider.dart';
 import 'package:penger/providers/scan_pass_provider.dart';
 import 'package:penger/splash.dart';
@@ -31,7 +32,14 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: multiBlocProviders(context),
       child: MultiProvider(
-        providers: [ChangeNotifierProvider(create: (_) => ScanPassModel())],
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => ScanPassModel(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => BookingItemModel(),
+          ),
+        ],
         child: MaterialApp(
           title: 'Penger',
           theme: themeData,

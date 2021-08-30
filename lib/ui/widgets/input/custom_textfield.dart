@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 
@@ -14,6 +15,10 @@ class CustomTextField extends StatelessWidget {
     this.inputAction,
     this.validator,
     this.controller,
+    this.lblStyle,
+    this.contentPadding,
+    this.decoration,
+    this.inputFormatters,
   }) : super(key: key);
 
   final String label;
@@ -25,6 +30,10 @@ class CustomTextField extends StatelessWidget {
   final TextInputAction? inputAction;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
+  final TextStyle? lblStyle;
+  final EdgeInsetsGeometry? contentPadding;
+  final InputDecoration? decoration;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +42,10 @@ class CustomTextField extends StatelessWidget {
       children: <Widget>[
         Text(
           label,
-          style: PengoStyle.title2(context).copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: lblStyle ??
+              PengoStyle.title2(context).copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(
           height: 10,
@@ -48,7 +58,13 @@ class CustomTextField extends StatelessWidget {
           readOnly: readOnly ?? false,
           textInputAction: inputAction,
           keyboardType: inputType,
-          decoration: InputDecoration(hintText: hintText),
+          inputFormatters: inputFormatters,
+          decoration: decoration == null
+              ? InputDecoration(
+                  hintText: hintText,
+                  contentPadding: contentPadding,
+                )
+              : decoration,
         ),
         const SizedBox(
           height: SECTION_GAP_HEIGHT,

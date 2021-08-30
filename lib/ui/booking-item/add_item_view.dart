@@ -1,17 +1,16 @@
-import 'package:checkbox_grouped/checkbox_grouped.dart';
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:penger/bloc/booking-categories/booking_category_bloc.dart';
-import 'package:penger/config/color.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
-import 'package:penger/helpers/theme/theme_helper.dart';
-import 'package:penger/models/booking_category_model.dart';
+import 'package:penger/models/providers/booking_item_model.dart';
+import 'package:penger/ui/booking-item/form_step_category.dart';
+import 'package:penger/ui/booking-item/form_step_configure.dart';
+import 'package:penger/ui/booking-item/form_step_info.dart';
+import 'package:penger/ui/booking-item/form_step_reward.dart';
 import 'package:penger/ui/booking-item/widgets/item_step_tile.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
-import 'package:penger/ui/widgets/list/custom_list_item.dart';
-import 'package:skeleton_animation/skeleton_animation.dart';
+import 'package:provider/provider.dart';
 
 class AddItemView extends StatefulWidget {
   const AddItemView({Key? key}) : super(key: key);
@@ -21,17 +20,12 @@ class AddItemView extends StatefulWidget {
 }
 
 class _AddItemViewState extends State<AddItemView> {
-  GroupController controller = GroupController();
+  late BookingItemModel _itemProvider;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
-
-  void _loadCategories() {
-    BlocProvider.of<BookingCategoryBloc>(context)
-        .add(FetchBookingCategoriesEvent());
   }
 
   @override
@@ -41,58 +35,64 @@ class _AddItemViewState extends State<AddItemView> {
         stepNum: 1,
         title: "Select category",
         subtitle: "Pick one for your booking item",
-        isCompleted: false,
+        isCompleted: _isStepOneCompleted(),
         onTap: () {
-          _loadCategories();
           showCupertinoModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) => Material(
-              child: Container(
-                padding: const EdgeInsets.all(18),
-                height: mediaQuery(context).size.height * 0.4,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Select category",
-                      style: PengoStyle.header(context),
-                    ),
-                    _buildCategories(context),
-                  ],
-                ),
-              ),
-            ),
-          );
+              context: context,
+              builder: (BuildContext context) => const FormStepCategory());
         },
       ),
       ItemStepTile(
         stepNum: 2,
         title: "Complete info",
         subtitle: "Let people knows more about this item",
-        isCompleted: false,
-        onTap: () {},
+        isCompleted: _isStepTwoCompleted(),
+        onTap: !_isStepOneCompleted()
+            ? null
+            : () {
+                showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const FormStepInfo();
+                    });
+              },
       ),
       ItemStepTile(
         stepNum: 3,
         title: "Configure",
         subtitle: "Configure booking slot",
-        isCompleted: false,
-        onTap: () {},
+        isCompleted: _isStepThreeCompleted(),
+        onTap: !_isStepTwoCompleted()
+            ? null
+            : () {
+                showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const FormStepConfigure();
+                    });
+              },
       ),
       ItemStepTile(
         stepNum: 4,
         title: "Reward",
         subtitle: "Stay connect with your customer",
-        isCompleted: false,
-        onTap: () {},
+        isCompleted: _isStepThreeCompleted() && _itemProvider.isStepFourDone,
+        onTap: !_isStepThreeCompleted()
+            ? null
+            : () {
+                showCupertinoModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const FormStepReward();
+                    });
+              },
       ),
       ItemStepTile(
         stepNum: 5,
         title: "Completed",
         subtitle: "Ready to publish",
         isCompleted: false,
-        onTap: () {},
+        onTap: !_isStepFourCompleted() ? null : () {},
       ),
     ];
 
@@ -127,30 +127,40 @@ class _AddItemViewState extends State<AddItemView> {
     );
   }
 
-  BlocBuilder<BookingCategoryBloc, BookingCategoryState> _buildCategories(
-      BuildContext context) {
-    return BlocBuilder(
-      builder: (BuildContext context, BookingCategoryState state) {
-        if (state is BookingCategoriesLoading) {
-          return const SkeletonText(
-            height: 25,
-          );
-        }
-        if (state is BookingCategoriesLoaded) {
-          return SimpleGroupedChips<BookingCategory>(
-            controller: controller,
-            values: state.categories,
-            itemTitle: state.categories.map((e) => e.name).toList(),
-            chipGroupStyle: ChipGroupStyle.minimize(
-              backgroundColorItem: greyBgColor,
-              selectedColorItem: primaryColor,
-              itemTitleStyle: PengoStyle.caption(context),
-            ),
-          );
-        }
-        return Container();
-      },
-      bloc: BlocProvider.of<BookingCategoryBloc>(context),
-    );
+  bool _isStepOneCompleted() {
+    debugPrint("step1 ${context.watch<BookingItemModel>().categoryId}");
+    return context.watch<BookingItemModel>().categoryId != null;
+  }
+
+  bool _isStepTwoCompleted() {
+    return _isStepOneCompleted() &&
+        context.watch<BookingItemModel>().name.isNotEmpty &&
+        context.watch<BookingItemModel>().poster != null &&
+        context.watch<BookingItemModel>().location.isNotEmpty;
+  }
+
+  bool _isStepThreeCompleted() {
+    return _isStepTwoCompleted() &&
+        context.watch<BookingItemModel>().startFrom != null &&
+        context.watch<BookingItemModel>().endAt != null;
+  }
+
+  bool _isStepFourCompleted() {
+    return _isStepThreeCompleted() &&
+        context.watch<BookingItemModel>().isStepFourDone == true;
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    _itemProvider = Provider.of<BookingItemModel>(context, listen: false);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _itemProvider.disposeBookingItemModel();
+    super.dispose();
   }
 }

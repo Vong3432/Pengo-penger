@@ -40,8 +40,12 @@ class ItemStepTile extends StatelessWidget {
             child: Align(
               child: Text(
                 stepNum.toString(),
-                style: PengoStyle.title2(context)
-                    .copyWith(color: isCompleted ? Colors.white : textColor),
+                style: PengoStyle.title2(context).copyWith(
+                    color: onTap == null
+                        ? textColor.shade300
+                        : isCompleted
+                            ? Colors.white
+                            : textColor),
               ),
             ),
           ),
@@ -49,11 +53,15 @@ class ItemStepTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: PengoStyle.title2(context),
+        style: PengoStyle.title2(context).copyWith(
+          color: onTap == null ? textColor.shade400 : textColor,
+        ),
       ),
       subtitle: Text(
         subtitle,
-        style: PengoStyle.captionNormal(context),
+        style: PengoStyle.captionNormal(context).copyWith(
+          color: onTap == null ? textColor.shade300 : textColor,
+        ),
       ),
     );
   }
