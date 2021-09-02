@@ -69,6 +69,7 @@ class FormStepReward extends StatelessWidget {
                         context
                             .read<BookingItemModel>()
                             .setIsStepFourDone(true);
+                        Navigator.of(context).pop();
                       },
                     ),
                   ],

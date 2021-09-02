@@ -7,6 +7,7 @@ import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/booking_category_model.dart';
 import 'package:penger/models/providers/booking_item_model.dart';
+import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class FormStepCategory extends StatefulWidget {
@@ -17,16 +18,10 @@ class FormStepCategory extends StatefulWidget {
 }
 
 class _FormStepCategoryState extends State<FormStepCategory> {
-  final GroupController controller = GroupController();
-
   @override
   void initState() {
     // TODO: implement initState
     _loadCategories();
-    controller.listen((c) {
-      BookingCategory? parsedC = c as BookingCategory;
-      context.read<BookingItemModel>().setCategoryId(parsedC.id);
-    });
     super.initState();
   }
 
@@ -61,15 +56,36 @@ class _FormStepCategoryState extends State<FormStepCategory> {
           );
         }
         if (state is BookingCategoriesLoaded) {
-          return SimpleGroupedChips<BookingCategory>(
-            controller: controller,
-            values: state.categories,
-            itemTitle: state.categories.map((e) => e.name).toList(),
-            chipGroupStyle: ChipGroupStyle.minimize(
-              backgroundColorItem: greyBgColor,
-              selectedColorItem: primaryColor,
-              itemTitleStyle: PengoStyle.caption(context),
-            ),
+          return SizedBox(
+            height: 70,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: state.categories.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(
+                    width: 10,
+                  );
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  final BookingCategory cat = state.categories[index];
+                  final bool isSelected =
+                      cat.id == context.watch<BookingItemModel>().categoryId;
+                  return ChoiceChip(
+                    label: Text(
+                      cat.name,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: isSelected ? whiteColor : primaryColor),
+                    ),
+                    selectedColor: primaryColor,
+                    backgroundColor: primaryLightColor,
+                    selected: isSelected,
+                    onSelected: (bool v) {
+                      context.read<BookingItemModel>().setCategoryId(cat.id);
+                    },
+                  );
+                }),
           );
         }
         return Container();
@@ -86,6 +102,7 @@ class _FormStepCategoryState extends State<FormStepCategory> {
   @override
   void dispose() {
     // TODO: implement dispose
+    debugPrint("Dispose");
     super.dispose();
   }
 }

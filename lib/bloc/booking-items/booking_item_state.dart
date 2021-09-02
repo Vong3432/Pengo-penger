@@ -26,3 +26,17 @@ class BookingItemsLoaded extends BookingItemState {
 }
 
 class BookingItemsNotLoaded extends BookingItemState {}
+
+class AddBookingItemInitial extends BookingItemState {}
+
+class AddBookingItemLoading extends BookingItemState {}
+
+class AddBookingItemSuccess extends BookingItemState {
+  const AddBookingItemSuccess(this.response);
+  final ResponseModel response;
+}
+
+class AddBookingItemFailed extends BookingItemState {
+  const AddBookingItemFailed(this.e);
+  final Object e;
+}

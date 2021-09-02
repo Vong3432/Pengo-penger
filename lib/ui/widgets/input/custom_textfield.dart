@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:penger/config/color.dart';
 import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 
@@ -19,11 +20,17 @@ class CustomTextField extends StatelessWidget {
     this.contentPadding,
     this.decoration,
     this.inputFormatters,
+    this.isOptional,
+    this.sideNote,
+    this.onSaved,
+    this.onEditingComplete,
   }) : super(key: key);
 
   final String label;
   final String hintText;
   final void Function(String value)? onChanged;
+  final void Function(String? value)? onSaved;
+  final void Function()? onEditingComplete;
   final bool? obsecureText;
   final bool? readOnly;
   final TextInputType? inputType;
@@ -34,25 +41,45 @@ class CustomTextField extends StatelessWidget {
   final EdgeInsetsGeometry? contentPadding;
   final InputDecoration? decoration;
   final List<TextInputFormatter>? inputFormatters;
+  final bool? isOptional;
+  final Text? sideNote;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          label,
-          style: lblStyle ??
-              PengoStyle.title2(context).copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+        Row(
+          children: <Widget>[
+            Text(
+              label,
+              style: lblStyle ??
+                  PengoStyle.title2(context).copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const Spacer(),
+            if (isOptional == true)
+              Text(
+                "(optional)",
+                style: PengoStyle.subcaption(context).copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: textColor.withOpacity(0.5),
+                ),
+              )
+            else
+              Container()
+          ],
         ),
         const SizedBox(
           height: 10,
         ),
         TextFormField(
+          onEditingComplete: onEditingComplete,
           controller: controller,
           validator: validator,
+          onSaved: onSaved,
+          autovalidateMode: AutovalidateMode.always,
           obscureText: obsecureText ?? false,
           onChanged: onChanged,
           readOnly: readOnly ?? false,
@@ -66,6 +93,7 @@ class CustomTextField extends StatelessWidget {
                 )
               : decoration,
         ),
+        sideNote ?? Container(),
         const SizedBox(
           height: SECTION_GAP_HEIGHT,
         ),

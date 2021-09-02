@@ -15,3 +15,8 @@ class FetchBookingItemsByCategoriesEvent extends BookingItemEvent {
   const FetchBookingItemsByCategoriesEvent(this.catId);
   final int catId;
 }
+
+class AddBookingItemEvent extends BookingItemEvent {
+  const AddBookingItemEvent(this.itemModel);
+  final BookingItemModel itemModel;
+}

@@ -1,7 +1,11 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:penger/helpers/formatter/bool_to_int.dart';
 
 class BookingItemModel with ChangeNotifier {
   int? _categoryId;
@@ -17,8 +21,56 @@ class BookingItemModel with ChangeNotifier {
   DateTime? _startFrom;
   DateTime? _endAt;
   double _creditPoints = 0;
-
+  int? _maxTransfer;
+  int? _maxBook;
+  int? _quantity;
+  int? _preservedBook;
+  double? _discountAmount = 0;
+  double? _lng;
+  double? _lat;
   bool _isStepFourDone = false;
+
+  void setLng(double v) {
+    _lng = v;
+    notifyListeners();
+  }
+
+  double? get lng => _lng;
+
+  void setLat(double v) {
+    _lat = v;
+    notifyListeners();
+  }
+
+  double? get lat => _lat;
+
+  void setDiscountAmount(double v) {
+    _discountAmount = v;
+    notifyListeners();
+  }
+
+  double? get discountAmount => _discountAmount;
+
+  void setMaxBook(int v) {
+    _maxBook = v;
+    notifyListeners();
+  }
+
+  int? get maxBook => _maxBook;
+
+  void setQuantity(int v) {
+    _quantity = v;
+    notifyListeners();
+  }
+
+  int? get quantity => _quantity;
+
+  void setMaxTransfer(int v) {
+    _maxTransfer = v;
+    notifyListeners();
+  }
+
+  int? get maxTransfer => _maxTransfer;
 
   void setIsStepFourDone(bool v) {
     _isStepFourDone = v;
@@ -64,7 +116,6 @@ class BookingItemModel with ChangeNotifier {
 
   void setName(String v) {
     _name = v;
-    debugPrint(v);
     notifyListeners();
   }
 
@@ -120,6 +171,35 @@ class BookingItemModel with ChangeNotifier {
 
   DateTime? get endAt => _endAt;
 
+  Future<Map<String, dynamic>> toMap() async {
+    debugPrint("${_poster == null}");
+    var map = new Map<String, dynamic>();
+    map["booking_category_id"] = _categoryId;
+    map["name"] = _name;
+    map["poster"] = await MultipartFile.fromFile(_poster!.path,
+        filename: _poster!.name, contentType: MediaType("image", "png"));
+    map["geolocation"] = {
+      "latitude": _lat,
+      "longitude": _lng,
+    };
+    map["is_preservable"] = boolToInt(_isPreserveable);
+    map["is_transferable"] = boolToInt(_isTransferable);
+    map["is_countable"] = boolToInt(_isCountable);
+    map["is_discountable"] = boolToInt(_isDiscountable);
+    map["quantity"] = _quantity;
+    map["discount_amount"] = _discountAmount;
+    map["credit_points"] = _creditPoints;
+    map["maximum_transfer"] = _maxTransfer;
+    map["maximum_book"] = _maxBook;
+    map["preserved_book"] = boolToInt(_isPreserveable);
+    map["price"] = _price;
+    map["start_from"] = DateFormat("yyyy-MM-dd hh:mm:ss").format(_startFrom!);
+    map["end_at"] = DateFormat("yyyy-MM-dd hh:mm:ss").format(_endAt!);
+
+    // Add all other fields
+    return map;
+  }
+
   void disposeBookingItemModel() {
     debugPrint("dispose");
     _categoryId = null;
@@ -136,5 +216,11 @@ class BookingItemModel with ChangeNotifier {
     _endAt = null;
     _creditPoints = 0;
     _isStepFourDone = false;
+    _lat = null;
+    _lng = null;
+    _maxBook = null;
+    _maxTransfer = null;
+    _quantity = null;
+    _discountAmount = null;
   }
 }

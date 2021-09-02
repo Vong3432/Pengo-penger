@@ -24,7 +24,8 @@ class ApiHelper {
     _dio.interceptors.addAll([
       InterceptorsWrapper(onError:
           (DioError error, ErrorInterceptorHandler errorInterceptorHandler) {
-        debugPrint(error.message);
+        debugPrint(error.toString());
+        errorInterceptorHandler.reject(error);
       }, onRequest:
           (RequestOptions request, RequestInterceptorHandler handler) async {
         _dio.interceptors.requestLock.lock();

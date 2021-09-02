@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:penger/config/color.dart';
 import 'package:penger/const/space_const.dart';
+import 'package:penger/helpers/intl/currency_converter.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/providers/booking_item_model.dart';
@@ -24,6 +24,10 @@ class FormStepConfigure extends StatefulWidget {
 class _FormStepConfigureState extends State<FormStepConfigure> {
   late TextEditingController _startFromController;
   late TextEditingController _endAtController;
+  late TextEditingController _transferController;
+  late TextEditingController _bookController;
+  late TextEditingController _discountController;
+  late TextEditingController _quantityController;
   late CustomGroupController _customGroupController;
 
   @override
@@ -39,6 +43,22 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
         text: myProvider.endAt == null
             ? ""
             : DateFormat.yMEd().add_jms().format(myProvider.endAt!));
+    _transferController = TextEditingController(
+      text: myProvider.maxTransfer == null
+          ? ""
+          : myProvider.maxTransfer.toString(),
+    );
+    _bookController = TextEditingController(
+      text: myProvider.maxBook == null ? "" : myProvider.maxBook.toString(),
+    );
+    _discountController = TextEditingController(
+      text: myProvider.discountAmount == null
+          ? ""
+          : myProvider.discountAmount.toString(),
+    );
+    _quantityController = TextEditingController(
+      text: myProvider.quantity == null ? "" : myProvider.quantity.toString(),
+    );
     _customGroupController = CustomGroupController();
     super.initState();
   }
@@ -68,7 +88,10 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
           lblStyle: PengoStyle.caption(context),
           inputType: TextInputType.number,
           hintText: '0',
+          controller: _transferController,
           contentPadding: const EdgeInsets.symmetric(horizontal: 18),
+          onChanged: (String v) =>
+              context.read<BookingItemModel>().setMaxTransfer(int.tryParse(v)!),
         ),
         "func": (bool v) => context.read<BookingItemModel>().setTransferable(v)
       },
@@ -76,12 +99,31 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
         "title": "Countable",
         "subtitle": "Maximum book for each time slot.",
         "value": context.watch<BookingItemModel>().countable,
-        "widget": CustomTextField(
-          label: 'Maximum book',
-          lblStyle: PengoStyle.caption(context),
-          inputType: TextInputType.number,
-          hintText: '0',
-          contentPadding: const EdgeInsets.symmetric(horizontal: 18),
+        "widget": Column(
+          children: [
+            CustomTextField(
+              label: 'Maximum book',
+              lblStyle: PengoStyle.caption(context),
+              inputType: TextInputType.number,
+              hintText: '0',
+              isOptional: true,
+              controller: _bookController,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 18),
+              onChanged: (String v) =>
+                  context.read<BookingItemModel>().setMaxBook(int.tryParse(v)!),
+            ),
+            CustomTextField(
+              label: 'Quantity',
+              lblStyle: PengoStyle.caption(context),
+              inputType: TextInputType.number,
+              hintText: '0',
+              controller: _quantityController,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 18),
+              onChanged: (String v) => context
+                  .read<BookingItemModel>()
+                  .setQuantity(int.tryParse(v)!),
+            ),
+          ],
         ),
         "func": (bool v) => context.read<BookingItemModel>().setCountable(v)
       },
@@ -91,9 +133,21 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
         "widget": CustomTextField(
           label: 'Discount amount (MYR)',
           lblStyle: PengoStyle.caption(context),
-          inputType: TextInputType.number,
+          inputType: const TextInputType.numberWithOptions(
+            signed: true,
+            decimal: true,
+          ),
           hintText: '10',
+          controller: _discountController,
+          decoration: InputDecoration(prefixText: currency),
           contentPadding: const EdgeInsets.symmetric(horizontal: 18),
+          onChanged: (String v) {
+            if (double.tryParse(v) == null) return;
+
+            context
+                .read<BookingItemModel>()
+                .setDiscountAmount(double.tryParse(v)!);
+          },
         ),
         "func": (bool v) => context.read<BookingItemModel>().setDiscountable(v)
       },
@@ -242,6 +296,10 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
     // TODO: implement dispose
     _startFromController.dispose();
     _endAtController.dispose();
+    _discountController.dispose();
+    _bookController.dispose();
+    _transferController.dispose();
+    _quantityController.dispose();
     super.dispose();
   }
 }

@@ -1,13 +1,18 @@
-import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:penger/bloc/booking-items/booking_item_bloc.dart';
+import 'package:penger/config/color.dart';
+import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
+import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/providers/booking_item_model.dart';
 import 'package:penger/ui/booking-item/form_step_category.dart';
 import 'package:penger/ui/booking-item/form_step_configure.dart';
 import 'package:penger/ui/booking-item/form_step_info.dart';
 import 'package:penger/ui/booking-item/form_step_reward.dart';
 import 'package:penger/ui/booking-item/widgets/item_step_tile.dart';
+import 'package:penger/ui/widgets/button/custom_button.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +58,11 @@ class _AddItemViewState extends State<AddItemView> {
                 showCupertinoModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) {
-                      return const FormStepInfo();
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            bottom: mediaQuery(context).viewInsets.bottom),
+                        child: const FormStepInfo(),
+                      );
                     });
               },
       ),
@@ -68,7 +77,11 @@ class _AddItemViewState extends State<AddItemView> {
                 showCupertinoModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) {
-                      return const FormStepConfigure();
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            bottom: mediaQuery(context).viewInsets.bottom),
+                        child: const FormStepConfigure(),
+                      );
                     });
               },
       ),
@@ -91,7 +104,7 @@ class _AddItemViewState extends State<AddItemView> {
         stepNum: 5,
         title: "Completed",
         subtitle: "Ready to publish",
-        isCompleted: false,
+        isCompleted: _isStepFiveCompleted(),
         onTap: !_isStepFourCompleted() ? null : () {},
       ),
     ];
@@ -111,13 +124,47 @@ class _AddItemViewState extends State<AddItemView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
-                children: [
+                children: <Widget>[
                   ListView.builder(
-                      itemCount: _tiles.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _tiles[index];
-                      })
+                    itemCount: _tiles.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _tiles[index];
+                    },
+                  ),
+                  const SizedBox(
+                    height: SECTION_GAP_HEIGHT * 2,
+                  ),
+                  BlocConsumer<BookingItemBloc, BookingItemState>(
+                    listener: (context, state) {
+                      // TODO: implement listener
+                      if (state is AddBookingItemSuccess) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content:
+                              Text(state.response.msg ?? 'Add successfully'),
+                          backgroundColor: primaryColor,
+                        ));
+                      }
+                      if (state is AddBookingItemFailed) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(state.e.toString()),
+                          backgroundColor: dangerColor,
+                        ));
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is AddBookingItemLoading) {
+                        return const CircularProgressIndicator();
+                      } else {
+                        return _isStepFiveCompleted()
+                            ? CustomButton(
+                                text: const Text("Create"),
+                                onPressed: _submit,
+                              )
+                            : Container();
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -128,7 +175,6 @@ class _AddItemViewState extends State<AddItemView> {
   }
 
   bool _isStepOneCompleted() {
-    debugPrint("step1 ${context.watch<BookingItemModel>().categoryId}");
     return context.watch<BookingItemModel>().categoryId != null;
   }
 
@@ -148,6 +194,18 @@ class _AddItemViewState extends State<AddItemView> {
   bool _isStepFourCompleted() {
     return _isStepThreeCompleted() &&
         context.watch<BookingItemModel>().isStepFourDone == true;
+  }
+
+  bool _isStepFiveCompleted() {
+    return _isStepFourCompleted();
+  }
+
+  void _submit() {
+    final BookingItemModel itemModel =
+        Provider.of<BookingItemModel>(context, listen: false);
+
+    BlocProvider.of<BookingItemBloc>(context)
+        .add(AddBookingItemEvent(itemModel));
   }
 
   @override
