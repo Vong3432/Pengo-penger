@@ -105,9 +105,13 @@ class _FormStepInfoState extends State<FormStepInfo> {
                 ),
                 ImageUploadField(
                     filePath: context.watch<BookingItemModel>().poster?.path,
+                    url: context.watch<BookingItemModel>().posterUrl,
                     onTap: () async {
-                      final XFile? poster =
-                          await _picker.pickImage(source: ImageSource.gallery);
+                      final XFile? poster = await _picker.pickImage(
+                          source: ImageSource.gallery,
+                          imageQuality: 60,
+                          maxHeight: 480,
+                          maxWidth: 640);
                       if (poster != null) {
                         context.read<BookingItemModel>().setPoster(poster);
                       } else {

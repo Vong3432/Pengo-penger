@@ -44,7 +44,6 @@ class ApiHelper {
             };
           }
         }
-
         _dio.interceptors.requestLock.unlock();
         handler.next(request);
       })
@@ -55,8 +54,8 @@ class ApiHelper {
     baseUrl: Platform.isIOS
         ? 'http://${dotenv.env['HOST']}:3333/'
         : 'http://10.0.2.2:3333/',
-    connectTimeout: 5000, //5
-    receiveTimeout: 3000,
+    connectTimeout: 60000, //1m
+    receiveTimeout: 60000, //1m
   ));
 
   Future<Response> get(String url,
@@ -79,6 +78,22 @@ class ApiHelper {
       void Function(int, int)? onSendProgress,
       void Function(int, int)? onReceiveProgress}) async {
     return _dio.post(url,
+        data: data != null ? FormData.fromMap(data) : null,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress);
+  }
+
+  Future<Response<Map<String, dynamic>>> put(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Options? options,
+      CancelToken? cancelToken,
+      void Function(int, int)? onSendProgress,
+      void Function(int, int)? onReceiveProgress}) async {
+    return _dio.put(url,
         data: data != null ? FormData.fromMap(data) : null,
         queryParameters: queryParameters,
         options: options,

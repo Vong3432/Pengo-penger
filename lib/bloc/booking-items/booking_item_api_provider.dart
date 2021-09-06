@@ -23,6 +23,17 @@ class BookingItemApiProvider {
     }
   }
 
+  Future<BookingItem> fetchBookingItem({required int id}) async {
+    try {
+      final response = await _apiHelper.get('/penger/booking-items/${id}');
+      final BookingItem data = BookingItem.fromJson(response.data['data']);
+      return data;
+    } catch (e) {
+      debugPrint(e.toString());
+      throw Exception(e);
+    }
+  }
+
   Future<ResponseModel> addBookingItem(BookingItemModel model) async {
     try {
       final response = await _apiHelper.post(
@@ -33,6 +44,18 @@ class BookingItemApiProvider {
       return ResponseModel.fromResponse(response);
     } catch (e) {
       debugPrint(e.toString());
+      throw Exception((e as DioError).error);
+    }
+  }
+
+  Future<ResponseModel> editBookingItem(BookingItemModel model) async {
+    try {
+      final response = await _apiHelper.put(
+        '/penger/booking-items/${model.id}',
+        data: await model.toMap(),
+      );
+      return ResponseModel.fromResponse(response);
+    } catch (e) {
       throw Exception((e as DioError).error);
     }
   }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -6,8 +7,10 @@ import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:penger/helpers/formatter/bool_to_int.dart';
+import 'package:penger/models/booking_item_model.dart';
 
 class BookingItemModel with ChangeNotifier {
+  int? _id;
   int? _categoryId;
   bool _isPreserveable = false;
   bool _isTransferable = false;
@@ -17,6 +20,7 @@ class BookingItemModel with ChangeNotifier {
   String _description = "";
   double? _price;
   XFile? _poster;
+  String? _posterUrl;
   String _location = "";
   DateTime? _startFrom;
   DateTime? _endAt;
@@ -29,6 +33,15 @@ class BookingItemModel with ChangeNotifier {
   double? _lng;
   double? _lat;
   bool _isStepFourDone = false;
+
+  int? get id => _id;
+
+  void setPosterUrl(String url) {
+    _posterUrl = url;
+    notifyListeners();
+  }
+
+  String? get posterUrl => _posterUrl;
 
   void setLng(double v) {
     _lng = v;
@@ -172,15 +185,17 @@ class BookingItemModel with ChangeNotifier {
   DateTime? get endAt => _endAt;
 
   Future<Map<String, dynamic>> toMap() async {
-    debugPrint("${_poster == null}");
     var map = new Map<String, dynamic>();
     map["booking_category_id"] = _categoryId;
     map["name"] = _name;
-    map["poster"] = await MultipartFile.fromFile(_poster!.path,
-        filename: _poster!.name, contentType: MediaType("image", "png"));
+    if (_poster != null) {
+      map["poster"] = await MultipartFile.fromFile(_poster!.path,
+          filename: _poster!.name, contentType: MediaType("image", "png"));
+    }
     map["geolocation"] = {
       "latitude": _lat,
       "longitude": _lng,
+      "name": _location,
     };
     map["is_preservable"] = boolToInt(_isPreserveable);
     map["is_transferable"] = boolToInt(_isTransferable);
@@ -195,9 +210,44 @@ class BookingItemModel with ChangeNotifier {
     map["price"] = _price;
     map["start_from"] = DateFormat("yyyy-MM-dd hh:mm:ss").format(_startFrom!);
     map["end_at"] = DateFormat("yyyy-MM-dd hh:mm:ss").format(_endAt!);
+    map["quantity"] = _quantity;
 
     // Add all other fields
     return map;
+  }
+
+  void setBookingItem(BookingItem item) {
+    _id = item.id;
+    _categoryId = item.categoryId;
+    _isCountable = item.isCountable ?? false;
+    _isTransferable = item.isTransferable ?? false;
+    _isDiscountable = item.isDiscountable ?? false;
+    _creditPoints =
+        item.creditPoints != null ? item.creditPoints! as double : 0.0;
+    _description = item.description ?? "";
+    _name = item.title;
+    _price = item.price;
+    _location = item.location ?? "";
+    _discountAmount = item.discountAmount;
+    _posterUrl = item.poster;
+    _quantity = item.quantity;
+    _maxTransfer = item.maxTransfer;
+    _maxBook = item.maxBook;
+
+    if (item.location != null) {
+      final d = jsonDecode(item.location!);
+      _location = d['name'].toString();
+      _lat = d['latitude'] as double;
+      _lng = d['longitude'] as double;
+    }
+
+    if (item.startFrom != null) {
+      _startFrom = item.startFrom;
+    }
+    if (item.endAt != null) {
+      _endAt = item.endAt;
+    }
+    notifyListeners();
   }
 
   void disposeBookingItemModel() {
@@ -211,6 +261,7 @@ class BookingItemModel with ChangeNotifier {
     _description = "";
     _price = null;
     _poster = null;
+    _posterUrl = null;
     _location = "";
     _startFrom = null;
     _endAt = null;

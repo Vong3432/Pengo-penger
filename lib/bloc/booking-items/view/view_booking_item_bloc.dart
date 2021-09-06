@@ -2,48 +2,36 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:penger/bloc/booking-items/booking_item_repo.dart';
 import 'package:penger/models/booking_item_model.dart';
 import 'package:penger/models/providers/booking_item_model.dart';
 import 'package:penger/models/response_model.dart';
 
-part 'booking_item_event.dart';
-part 'booking_item_state.dart';
+part 'view_booking_item_event.dart';
+part 'view_booking_item_state.dart';
 
-class BookingItemBloc extends Bloc<BookingItemEvent, BookingItemState> {
-  BookingItemBloc() : super(BookingItemInitial());
+class ViewItemBloc extends Bloc<ViewBookingItemEvent, ViewBookingItemState> {
+  ViewItemBloc() : super(BookingItemInitial());
 
   final BookingItemRepo _repo = BookingItemRepo();
 
   @override
-  Stream<BookingItemState> mapEventToState(
-    BookingItemEvent event,
+  Stream<ViewBookingItemState> mapEventToState(
+    ViewBookingItemEvent event,
   ) async* {
     // TODO: implement mapEventToState
     if (event is FetchBookingItemsEvent) {
       yield* _mapFetchItemsToState();
     }
+    if (event is FetchBookingItemEvent) {
+      yield* _mapFetchItem(event.itemId);
+    }
     if (event is FetchBookingItemsByCategoriesEvent) {
       yield* _mapFetchItemsByCatToState(event.catId);
     }
-    if (event is AddBookingItemEvent) {
-      yield* _mapAddItemToState(event.itemModel);
-    }
   }
 
-  Stream<BookingItemState> _mapAddItemToState(BookingItemModel model) async* {
-    try {
-      yield AddBookingItemLoading();
-      final ResponseModel response = await _repo.addBookingItem(model);
-      await Future.delayed(const Duration(seconds: 1));
-      yield AddBookingItemSuccess(response);
-    } catch (e) {
-      yield AddBookingItemFailed(e);
-    }
-  }
-
-  Stream<BookingItemState> _mapFetchItemsToState() async* {
+  Stream<ViewBookingItemState> _mapFetchItemsToState() async* {
     try {
       yield BookingItemsLoading();
       final List<BookingItem> items = await _repo.fetchBookingItems();
@@ -54,7 +42,7 @@ class BookingItemBloc extends Bloc<BookingItemEvent, BookingItemState> {
     }
   }
 
-  Stream<BookingItemState> _mapFetchItemsByCatToState(int catId) async* {
+  Stream<ViewBookingItemState> _mapFetchItemsByCatToState(int catId) async* {
     try {
       yield BookingItemsLoading();
       final List<BookingItem> items =
@@ -62,6 +50,17 @@ class BookingItemBloc extends Bloc<BookingItemEvent, BookingItemState> {
       yield BookingItemsLoaded(items);
     } catch (_) {
       yield BookingItemsNotLoaded();
+    }
+  }
+
+  Stream<ViewBookingItemState> _mapFetchItem(int itemId) async* {
+    try {
+      yield BookingItemLoading();
+      final BookingItem item = await _repo.fetchBookingItem(id: itemId);
+      Future.delayed(Duration(seconds: 2));
+      yield BookingItemLoaded(item);
+    } catch (_) {
+      yield BookingItemNotLoaded();
     }
   }
 }

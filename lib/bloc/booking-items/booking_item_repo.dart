@@ -17,6 +17,12 @@ class BookingItemRepo {
   Future<List<BookingItem>> fetchBookingItems({int? catId}) async =>
       _bookingItemApiProvider.fetchBookingItems(catId: catId);
 
+  Future<BookingItem> fetchBookingItem({required int id}) async =>
+      _bookingItemApiProvider.fetchBookingItem(id: id);
+
   Future<ResponseModel> addBookingItem(BookingItemModel model) async =>
       _bookingItemApiProvider.addBookingItem(model);
+
+  Future<ResponseModel> editBookingItem(BookingItemModel model) async =>
+      _bookingItemApiProvider.editBookingItem(model);
 }

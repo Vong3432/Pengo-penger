@@ -4,8 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:penger/bloc/booking-categories/booking_category_bloc.dart';
-import 'package:penger/bloc/booking-items/booking_item_bloc.dart';
+import 'package:penger/bloc/booking-items/view/view_booking_item_bloc.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
@@ -13,6 +14,7 @@ import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/booking_category_model.dart';
 import 'package:penger/models/booking_item_model.dart';
 import 'package:penger/ui/booking-item/add_item_view.dart';
+import 'package:penger/ui/booking-item/edit_item_view.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
@@ -39,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   void _loadCategories() {
     BlocProvider.of<BookingCategoryBloc>(context)
         .add(FetchBookingCategoriesEvent());
-    BlocProvider.of<BookingItemBloc>(context).add(FetchBookingItemsEvent());
+    BlocProvider.of<ViewItemBloc>(context).add(FetchBookingItemsEvent());
   }
 
   @override
@@ -55,9 +57,11 @@ class _HomePageState extends State<HomePage> {
             heroTag: "add item",
             backgroundColor: primaryColor,
             onPressed: () {
-              Navigator.of(context, rootNavigator: true).push(
-                CupertinoPageRoute(builder: (context) => AddItemView()),
-              );
+              Navigator.of(context, rootNavigator: true)
+                  .push(
+                    CupertinoPageRoute(builder: (context) => AddItemView()),
+                  )
+                  .then((_) => _loadCategories());
             },
             child: const Icon(Icons.add_outlined),
           ),
@@ -112,11 +116,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  BlocBuilder<BookingItemBloc, BookingItemState> _buildItems(
+  BlocBuilder<ViewItemBloc, ViewBookingItemState> _buildItems(
       BuildContext context) {
     return BlocBuilder(
-        bloc: BlocProvider.of<BookingItemBloc>(context),
-        builder: (BuildContext context, BookingItemState state) {
+        bloc: BlocProvider.of<ViewItemBloc>(context),
+        builder: (BuildContext context, ViewBookingItemState state) {
           if (state is BookingItemsLoading) {
             return GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
@@ -142,39 +146,62 @@ class _HomePageState extends State<HomePage> {
                 itemCount: state.items.length,
                 itemBuilder: (BuildContext context, int index) {
                   final BookingItem item = state.items[index];
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Image.network(
-                        item.poster,
-                        height: 160,
-                      ),
-                      Text(
-                        item.title,
-                        style: PengoStyle.caption(context),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          if (item.startFrom != null && item.endAt != null)
-                            Text(
-                              "${item.startFrom}-${item.endAt}",
-                              style: PengoStyle.captionNormal(context),
-                            ),
-                          if (item.availableFrom != null &&
-                              item.availableTo != null)
-                            Text(
-                              "${item.availableFrom}-${item.availableTo}",
-                              style: PengoStyle.smallerText(context),
-                            ),
-                        ],
-                      )
-                    ],
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true)
+                          .push(
+                            CupertinoPageRoute(
+                                builder: (context) =>
+                                    EditItemView(itemId: item.id)),
+                          )
+                          .then((value) => _loadCategories());
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Image.network(
+                          item.poster,
+                          height: 160,
+                        ),
+                        Text(
+                          item.title,
+                          style: PengoStyle.caption(context),
+                        ),
+                        _buildDateAndTime(item, context)
+                      ],
+                    ),
                   );
                 });
           }
           return Container();
         });
+  }
+
+  Widget _buildDateAndTime(BookingItem item, BuildContext context) {
+    if (item.startFrom != null && item.endAt != null) {
+      return Row(
+        children: <Widget>[
+          Text(
+            "${DateFormat.yMd().format(item.startFrom!)}-${DateFormat.yMd().format(item.endAt!)}",
+            style: PengoStyle.captionNormal(context),
+          ),
+        ],
+      );
+    }
+
+    if (item.availableFrom != null && item.availableTo != null) {
+      return Row(
+        children: [
+          Text(
+            "${item.availableFrom}-${item.availableTo}",
+            style: PengoStyle.smallerText(context),
+          ),
+        ],
+      );
+    }
+
+    return Container();
   }
 
   BlocBuilder<BookingCategoryBloc, BookingCategoryState> _buildCategories(
