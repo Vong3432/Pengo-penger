@@ -35,12 +35,13 @@ class ApiHelper {
           // return handler.reject(
           //     DioError(requestOptions: request, error: "Not authenticated"),
           //     true);
-          final dynamic auth = jsonDecode(prefs);
+          final Auth auth =
+              Auth.fromJson(jsonDecode(prefs) as Map<String, dynamic>);
 
-          request.headers["Authorization"] = "Bearer ${auth['token']}";
-          if (auth['selected_penger'] != null) {
+          request.headers["Authorization"] = "Bearer ${auth.token}";
+          if (auth.selectedPenger != null) {
             request.queryParameters = {
-              "penger_id": auth['selected_penger']['id'].toString()
+              "penger_id": auth.selectedPenger!.id.toString()
             };
           }
         }

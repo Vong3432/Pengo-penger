@@ -13,11 +13,11 @@ class BookingCategoryApiProvider {
       final data = response.data['data'] as List;
 
       List<BookingCategory> bookingCategories = List<BookingCategory>.from(
-          data.map((i) => BookingCategory.fromJson(i)));
+          data.map((i) => BookingCategory.fromJson(i as Map<String, dynamic>)));
 
       return bookingCategories;
     } catch (e) {
-      debugPrint("err: ${e.toString()}");
+      debugPrint("err cat: ${e.toString()}");
       throw Exception(e);
     }
   }

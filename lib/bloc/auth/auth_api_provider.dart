@@ -18,7 +18,8 @@ class AuthApiProvider {
         "phone": "+6$phone",
         "password": password,
       });
-      final auth = Auth.fromJson(response.data!['data']);
+      final Auth auth =
+          Auth.fromJson(response.data!['data'] as Map<String, dynamic>);
       return auth;
     } catch (e) {
       debugPrint(e.toString());
@@ -44,7 +45,8 @@ class AuthApiProvider {
       };
       final Response<Map<String, dynamic>> response =
           await _apiHelper.post('/auth/penger/login', data: fd);
-      final Auth auth = Auth.fromJson(response.data!['data']);
+      final Auth auth =
+          Auth.fromJson(response.data!['data'] as Map<String, dynamic>);
       return auth;
     } catch (e) {
       throw Exception(e);

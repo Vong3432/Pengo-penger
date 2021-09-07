@@ -26,8 +26,8 @@ class PengerApiProvider {
           queryParameters: {'limit': limit, 'page': pageNum});
 
       final data = response.data['data'] as List;
-      List<Penger> pengers =
-          List<Penger>.from(data.map((i) => Penger.fromJson(i)));
+      List<Penger> pengers = List<Penger>.from(
+          data.map((i) => Penger.fromJson(i as Map<String, dynamic>)));
 
       return pengers;
     } catch (e) {
@@ -44,8 +44,8 @@ class PengerApiProvider {
           queryParameters: {'limit': limit, 'page': pageNum});
 
       final data = response.data['data'] as List;
-      List<Penger> pengers =
-          List<Penger>.from(data.map((i) => Penger.fromJson(i)));
+      List<Penger> pengers = List<Penger>.from(
+          data.map((i) => Penger.fromJson(i as Map<String, dynamic>)));
 
       return pengers;
     } catch (e) {
@@ -60,7 +60,7 @@ class PengerApiProvider {
           queryParameters: {'limit': limit, 'page': pageNum});
 
       final data = response.data['data'];
-      Penger penger = Penger.fromJson(data);
+      Penger penger = Penger.fromJson(data as Map<String, dynamic>);
 
       return penger;
     } catch (e) {

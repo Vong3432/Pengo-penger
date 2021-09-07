@@ -217,6 +217,7 @@ class BookingItemModel with ChangeNotifier {
   }
 
   void setBookingItem(BookingItem item) {
+    debugPrint("ITEM: ${item.categoryId}");
     _id = item.id;
     _categoryId = item.categoryId;
     _isCountable = item.isCountable ?? false;
@@ -235,10 +236,9 @@ class BookingItemModel with ChangeNotifier {
     _maxBook = item.maxBook;
 
     if (item.location != null) {
-      final d = jsonDecode(item.location!);
-      _location = d['name'].toString();
-      _lat = d['latitude'] as double;
-      _lng = d['longitude'] as double;
+      _location = item.location!;
+      _lat = item.geolocation!.latitude;
+      _lng = item.geolocation!.longitude;
     }
 
     if (item.startFrom != null) {

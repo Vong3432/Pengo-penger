@@ -14,8 +14,8 @@ class BookingItemApiProvider {
     try {
       final response = await _apiHelper.get('/penger/booking-items');
       final data = response.data['data'] as List;
-      List<BookingItem> bookingItems =
-          List<BookingItem>.from(data.map((i) => BookingItem.fromJson(i)));
+      List<BookingItem> bookingItems = List<BookingItem>.from(
+          data.map((i) => BookingItem.fromJson(i as Map<String, dynamic>)));
       return bookingItems;
     } catch (e) {
       debugPrint("err_item: ${e.toString()}");
@@ -26,7 +26,8 @@ class BookingItemApiProvider {
   Future<BookingItem> fetchBookingItem({required int id}) async {
     try {
       final response = await _apiHelper.get('/penger/booking-items/${id}');
-      final BookingItem data = BookingItem.fromJson(response.data['data']);
+      final BookingItem data =
+          BookingItem.fromJson(response.data['data'] as Map<String, dynamic>);
       return data;
     } catch (e) {
       debugPrint(e.toString());

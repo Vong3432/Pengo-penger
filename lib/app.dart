@@ -64,6 +64,13 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  final List<String> _icons = <String>[
+    HOME_ICON_PATH,
+    COUPON_ICON_PATH,
+    NOTIFICATION_ICON_PATH,
+    PROFILE_ICON_PATH,
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -108,22 +115,27 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: whiteColor,
         child: SvgPicture.asset(SCAN_ICON_PATH),
       ),
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        activeColor: primaryColor,
+      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+        itemCount: 4,
+        tabBuilder: (int index, bool isActive) {
+          final Color color = _selectedIndex == index
+              ? primaryColor
+              : textColor.withOpacity(0.65);
+          return SvgPicture.asset(
+            _icons[index],
+            color: color,
+            width: 27,
+            height: 27,
+            fit: BoxFit.scaleDown,
+          );
+        },
         splashColor: greyBgColor,
         elevation: 17,
         backgroundColor: whiteColor,
         activeIndex: _selectedIndex,
-        iconSize: 27,
         onTap: _onBottomNavItemTapped,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.defaultEdge,
-        icons: const <IconData>[
-          Icons.home_outlined,
-          Icons.credit_card,
-          Icons.calendar_today_outlined,
-          Icons.person_outlined,
-        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

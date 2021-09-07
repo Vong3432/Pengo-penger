@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:penger/bloc/booking-items/booking_item_repo.dart';
 import 'package:penger/models/booking_item_model.dart';
 import 'package:penger/models/providers/booking_item_model.dart';
@@ -58,6 +59,7 @@ class ViewItemBloc extends Bloc<ViewBookingItemEvent, ViewBookingItemState> {
       yield BookingItemLoading();
       final BookingItem item = await _repo.fetchBookingItem(id: itemId);
       Future.delayed(Duration(seconds: 2));
+      debugPrint("fet: ${item.toJson()}");
       yield BookingItemLoaded(item);
     } catch (_) {
       yield BookingItemNotLoaded();

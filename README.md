@@ -7,3 +7,8 @@
 <p align="center" width="100%">
 <small><i>The actual booking app.</i></small>
 </p> -->
+
+### Commands
+
+1. Generate JSON serializable files
+   `flutter pub run build_runner build`
