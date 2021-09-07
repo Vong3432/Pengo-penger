@@ -14,37 +14,6 @@ class Auth {
     this.pengers,
   });
 
-  // factory Auth.fromJson(dynamic json) {
-  //   final dynamic user = json['user'];
-  //   List<Penger> pengers =
-  //       (json['pengers'] as List).map((i) => Penger.fromJson(i)).toList();
-
-  //   return Auth(
-  //     id: user['id'] as int,
-  //     username: user['username'].toString(),
-  //     avatar: user['avatar'].toString(),
-  //     phone: user['phone'].toString(),
-  //     email: user['email'].toString(),
-  //     token: json['token']['token'].toString(),
-  //     pengers: pengers,
-  //     selectedPenger: pengers[0],
-  //   );
-  // }
-
-  // Map<String, dynamic> toMap() {
-  //   var map = new Map<String, dynamic>();
-  //   map["id"] = id;
-  //   map["username"] = username;
-  //   map["avatar"] = avatar;
-  //   map["phone"] = phone;
-  //   map["email"] = email;
-  //   map["token"] = token;
-  //   map["pengers"] = pengers?.map((Penger e) => e.toMap()).toList();
-  //   map["selected_penger"] = selectedPenger?.toMap();
-  //   // Add all other fields
-  //   return map;
-  // }
-
   factory Auth.fromJson(Map<String, dynamic> json) {
     final Auth t = _$AuthFromJson(json);
     if (t.pengers != null) {
