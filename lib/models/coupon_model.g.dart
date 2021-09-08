@@ -8,28 +8,30 @@ part of 'coupon_model.dart';
 
 Coupon _$CouponFromJson(Map<String, dynamic> json) {
   return Coupon(
-    id: json['id'] as int,
-    tile: json['tile'] as String,
+    id: json['id'] as int?,
+    title: json['title'] as String,
     description: json['description'] as String?,
     minCreditPoints: (json['min_credit_points'] as num?)?.toDouble(),
     requiredCreditPoints: (json['required_credit_points'] as num?)?.toDouble(),
-    validFrom: DateTime.parse(json['valid_from'] as String),
-    validTo: DateTime.parse(json['valid_to'] as String),
+    validFrom: json['valid_from'] as String,
+    validTo: json['valid_to'] as String,
     quantity: json['quantity'] as int,
     isRedeemable: json['is_redeemable'] as bool,
-    createdBy: Penger.fromJson(json['created_by'] as Map<String, dynamic>),
+    itemIds: (json['only_to_items'] as List<dynamic>?)
+        ?.map((e) => e as int)
+        .toList(),
   );
 }
 
 Map<String, dynamic> _$CouponToJson(Coupon instance) => <String, dynamic>{
       'id': instance.id,
-      'tile': instance.tile,
+      'title': instance.title,
       'description': instance.description,
-      'created_by': instance.createdBy,
       'min_credit_points': instance.minCreditPoints,
       'required_credit_points': instance.requiredCreditPoints,
-      'valid_from': instance.validFrom.toIso8601String(),
-      'valid_to': instance.validTo.toIso8601String(),
+      'valid_from': instance.validFrom,
+      'valid_to': instance.validTo,
       'quantity': instance.quantity,
       'is_redeemable': instance.isRedeemable,
+      'only_to_items': instance.itemIds,
     };

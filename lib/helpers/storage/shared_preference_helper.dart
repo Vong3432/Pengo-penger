@@ -61,4 +61,9 @@ class SharedPreferencesHelper {
     final SharedPreferences prefs = await _sp;
     return prefs.getStringList(key);
   }
+
+  Future<void> remove(String key) async {
+    final SharedPreferences prefs = await _sp;
+    prefs.remove(key);
+  }
 }

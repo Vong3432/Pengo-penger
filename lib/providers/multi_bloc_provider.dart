@@ -5,6 +5,8 @@ import 'package:penger/bloc/booking-categories/booking_category_bloc.dart';
 import 'package:penger/bloc/booking-items/create/create_booking_item_bloc.dart';
 import 'package:penger/bloc/booking-items/edit/edit_booking_item_bloc.dart';
 import 'package:penger/bloc/booking-items/view/view_booking_item_bloc.dart';
+import 'package:penger/bloc/coupons/view/view_active_coupons_bloc.dart';
+import 'package:penger/bloc/coupons/view/view_expired_coupons_bloc.dart';
 
 List<BlocProvider<dynamic>> multiBlocProviders(BuildContext context) {
   return <BlocProvider<dynamic>>[
@@ -22,6 +24,12 @@ List<BlocProvider<dynamic>> multiBlocProviders(BuildContext context) {
     ),
     BlocProvider<ViewItemBloc>(
       create: (BuildContext context) => ViewItemBloc(),
+    ),
+    BlocProvider<ViewActiveCouponsBloc>(
+      create: (BuildContext context) => ViewActiveCouponsBloc(),
+    ),
+    BlocProvider<ViewExpiredCouponsBloc>(
+      create: (BuildContext context) => ViewExpiredCouponsBloc(),
     ),
   ];
 }

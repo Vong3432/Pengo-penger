@@ -55,6 +55,7 @@ dependencies:
   json_annotation: ^4.0.1
   lottie: ^1.1.0
   modal_bottom_sheet: ^2.0.0
+  multi_select_flutter: ^4.0.0
   provider: ^5.0.0
   qr_code_scanner: ^0.5.2
   rxdart: ^0.27.1

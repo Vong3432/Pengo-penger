@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:penger/config/theme.dart';
 import 'package:penger/helpers/notification/push_notification_manager.dart';
+import 'package:penger/models/providers/auth_model.dart';
 import 'package:penger/models/providers/booking_item_model.dart';
 import 'package:penger/providers/multi_bloc_provider.dart';
 import 'package:penger/providers/scan_pass_provider.dart';
@@ -38,6 +39,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (_) => BookingItemModel(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => AuthModel(),
           ),
         ],
         child: MaterialApp(

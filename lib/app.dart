@@ -7,7 +7,7 @@ import 'package:penger/config/color.dart';
 import 'package:penger/const/icon_const.dart';
 import 'package:penger/helpers/notification/push_notification_manager.dart';
 import 'package:penger/helpers/routes/route.dart';
-import 'package:penger/ui/coupon/coupon_view.dart';
+import 'package:penger/ui/coupon/coupon_listing_view.dart';
 import 'package:penger/ui/home/home_view.dart';
 import 'package:penger/ui/notification/notification_view.dart';
 import 'package:penger/ui/profile/profile_view.dart';
@@ -113,7 +113,10 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         tooltip: 'Scan',
         backgroundColor: whiteColor,
-        child: SvgPicture.asset(SCAN_ICON_PATH),
+        child: SvgPicture.asset(
+          SCAN_ICON_PATH,
+          color: primaryColor,
+        ),
       ),
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
         itemCount: 4,

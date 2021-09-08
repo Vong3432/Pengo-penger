@@ -5,11 +5,14 @@ import 'package:penger/config/color.dart';
 import 'package:penger/const/icon_const.dart';
 import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
+import 'package:penger/models/providers/auth_model.dart';
+import 'package:penger/ui/auth/login_view.dart';
 import 'package:penger/ui/profile/profile_info.dart';
 import 'package:penger/ui/profile/setting_view.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
 import 'package:penger/ui/widgets/list/custom_list_item.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -59,6 +62,14 @@ class ProfilePage extends StatelessWidget {
           height: SECTION_GAP_HEIGHT,
         ),
         CustomListItem(
+          onTap: () {
+            context.read<AuthModel>().logoutUser();
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => LoginPage()),
+                (_) => false);
+          },
           leading: Container(
             width: 42,
             height: 42,
@@ -200,6 +211,13 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildProfileInfo(BuildContext context) {
+    final String _avatar = context.select<AuthModel, String>(
+        (AuthModel model) => model.user?.avatar ?? '');
+    final String _username = context.select<AuthModel, String>(
+        (AuthModel model) => model.user?.username ?? '');
+    final String _phone = context.select<AuthModel, String>(
+        (AuthModel model) => model.user?.phone ?? '');
+
     return GestureDetector(
       onTap: () {
         Navigator.of(context, rootNavigator: true).push(
@@ -215,10 +233,12 @@ class ProfilePage extends StatelessWidget {
         ),
         child: Row(
           children: <Widget>[
-            const CircleAvatar(
+            CircleAvatar(
               minRadius: 27,
+              backgroundColor: Colors.transparent,
               backgroundImage: NetworkImage(
-                  "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80"),
+                _avatar,
+              ),
             ),
             const SizedBox(
               width: SECTION_GAP_HEIGHT,
@@ -227,11 +247,11 @@ class ProfilePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  "John Doe",
+                  _username,
                   style: PengoStyle.header(context),
                 ),
                 Text(
-                  "012-3456789",
+                  _phone,
                   style: PengoStyle.text(context),
                 ),
               ],

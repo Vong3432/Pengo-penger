@@ -23,6 +23,7 @@ class CustomTextField extends StatelessWidget {
     this.isOptional,
     this.sideNote,
     this.onSaved,
+    this.onTap,
     this.onEditingComplete,
   }) : super(key: key);
 
@@ -30,6 +31,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final void Function(String value)? onChanged;
   final void Function(String? value)? onSaved;
+  final void Function()? onTap;
   final void Function()? onEditingComplete;
   final bool? obsecureText;
   final bool? readOnly;
@@ -53,10 +55,7 @@ class CustomTextField extends StatelessWidget {
           children: <Widget>[
             Text(
               label,
-              style: lblStyle ??
-                  PengoStyle.title2(context).copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: lblStyle ?? PengoStyle.caption(context),
             ),
             const Spacer(),
             if (isOptional == true)
@@ -75,11 +74,12 @@ class CustomTextField extends StatelessWidget {
           height: 10,
         ),
         TextFormField(
+          onTap: onTap,
           onEditingComplete: onEditingComplete,
           controller: controller,
           validator: validator,
           onSaved: onSaved,
-          autovalidateMode: AutovalidateMode.always,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           obscureText: obsecureText ?? false,
           onChanged: onChanged,
           readOnly: readOnly ?? false,

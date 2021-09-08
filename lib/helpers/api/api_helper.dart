@@ -41,11 +41,13 @@ class ApiHelper {
           request.headers["Authorization"] = "Bearer ${auth.token}";
           if (auth.selectedPenger != null) {
             request.queryParameters = {
+              ...request.queryParameters,
               "penger_id": auth.selectedPenger!.id.toString()
             };
           }
         }
         _dio.interceptors.requestLock.unlock();
+
         handler.next(request);
       })
     ]);

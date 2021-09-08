@@ -19,7 +19,7 @@ class BookingItemApiProvider {
       return bookingItems;
     } catch (e) {
       debugPrint("err_item: ${e.toString()}");
-      throw Exception(e);
+      throw Exception((e as DioError).error);
     }
   }
 
@@ -31,7 +31,7 @@ class BookingItemApiProvider {
       return data;
     } catch (e) {
       debugPrint(e.toString());
-      throw Exception(e);
+      throw Exception((e as DioError).error);
     }
   }
 
