@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:penger/helpers/formatter/bool_to_int.dart';
+import 'package:penger/models/booking_item_model.dart';
 import 'package:penger/models/penger_model.dart';
 
 part 'coupon_model.g.dart';
@@ -17,6 +18,7 @@ class Coupon {
     required this.quantity,
     required this.isRedeemable,
     this.itemIds,
+    this.bookingItems,
     // required this.createdBy,
   });
 
@@ -70,4 +72,7 @@ class Coupon {
 
   @JsonKey(name: 'only_to_items', fromJson: null)
   final List<int>? itemIds;
+
+  @JsonKey(name: 'booking_items', toJson: null)
+  final List<BookingItem>? bookingItems;
 }

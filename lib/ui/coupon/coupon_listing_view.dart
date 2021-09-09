@@ -10,7 +10,7 @@ import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/coupon_model.dart';
-import 'package:penger/ui/coupon/add_coupon_view.dart';
+import 'package:penger/ui/coupon/coupon_view.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
@@ -51,7 +51,9 @@ class _CouponPageState extends State<CouponPage>
             onPressed: () {
               Navigator.of(context, rootNavigator: true)
                   .push(
-                    CupertinoPageRoute(builder: (context) => AddCouponPage()),
+                    CupertinoPageRoute(
+                        builder: (context) =>
+                            const CouponViewPage(isEditing: false)),
                   )
                   .then((_) => _tabChanged(_tabIndex));
             },
@@ -198,17 +200,28 @@ class _CouponPageState extends State<CouponPage>
   }
 
   Widget _buildCouponItem(Coupon coupon) {
-    return CheckboxListTile(
-      controlAffinity: ListTileControlAffinity.leading,
-      value: selectedCouponList.contains(coupon),
-      onChanged: (bool? val) {
-        setState(() {
-          if (val == true) {
-            selectedCouponList.add(coupon);
-          } else {
-            selectedCouponList.remove(coupon);
-          }
-        });
+    return ListTile(
+      // controlAffinity: ListTileControlAffinity.leading,
+      // value: selectedCouponList.contains(coupon),
+      // onChanged: (bool? val) {
+      //   setState(() {
+      //     if (val == true) {
+      //       selectedCouponList.add(coupon);
+      //     } else {
+      //       selectedCouponList.remove(coupon);
+      //     }
+      //   });
+      // },
+      onTap: () {
+        Navigator.of(context, rootNavigator: true)
+            .push(
+              CupertinoPageRoute(
+                  builder: (context) => CouponViewPage(
+                        isEditing: true,
+                        id: coupon.id,
+                      )),
+            )
+            .then((_) => _tabChanged(_tabIndex));
       },
       title: Text(
         coupon.title,
@@ -226,7 +239,7 @@ class _CouponPageState extends State<CouponPage>
           ),
         )),
       ),
-      secondary: Text(
+      trailing: Text(
         '${DateFormat("MMM d").format(DateTime.parse(coupon.validFrom))} - ${DateFormat("MMM d").format(DateTime.parse(coupon.validTo))}',
         style: PengoStyle.caption(context).copyWith(
           color: secondaryTextColor,

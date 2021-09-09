@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -8,7 +9,7 @@ import 'package:penger/models/geolocation_model.dart';
 part 'booking_item_model.g.dart';
 
 @JsonSerializable()
-class BookingItem {
+class BookingItem extends Equatable {
   BookingItem({
     required this.poster,
     required this.isActive,
@@ -108,4 +109,8 @@ class BookingItem {
 
   @JsonKey(name: 'geolocation', includeIfNull: false)
   final Geolocation? geolocation;
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [id];
 }

@@ -39,6 +39,7 @@ class ApiHelper {
               Auth.fromJson(jsonDecode(prefs) as Map<String, dynamic>);
 
           request.headers["Authorization"] = "Bearer ${auth.token}";
+          debugPrint(request.contentType);
           if (auth.selectedPenger != null) {
             request.queryParameters = {
               ...request.queryParameters,
@@ -81,7 +82,7 @@ class ApiHelper {
       void Function(int, int)? onSendProgress,
       void Function(int, int)? onReceiveProgress}) async {
     return _dio.post(url,
-        data: data != null ? FormData.fromMap(data) : null,
+        data: data != null ? data : null,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,
@@ -97,7 +98,7 @@ class ApiHelper {
       void Function(int, int)? onSendProgress,
       void Function(int, int)? onReceiveProgress}) async {
     return _dio.put(url,
-        data: data != null ? FormData.fromMap(data) : null,
+        data: data != null ? data : null,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,

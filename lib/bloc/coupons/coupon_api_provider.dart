@@ -30,7 +30,7 @@ class CouponApiProvider {
 
   Future<Coupon> fetchCoupon({required int id}) async {
     try {
-      final response = await _apiHelper.get('/penger/booking-items/${id}');
+      final response = await _apiHelper.get('/penger/coupons/${id}');
       final Coupon data =
           Coupon.fromJson(response.data['data'] as Map<String, dynamic>);
       return data;
@@ -54,11 +54,12 @@ class CouponApiProvider {
     }
   }
 
-  Future<ResponseModel> editCoupon(Coupon model) async {
+  Future<ResponseModel> editCoupon(Coupon coupon) async {
     try {
+      debugPrint(coupon.toJson().toString());
       final response = await _apiHelper.put(
-        '/penger/booking-items/${model.id}',
-        data: await model.toJson(),
+        '/penger/coupons/${coupon.id}',
+        data: coupon.toJson(),
       );
       return ResponseModel.fromResponse(response);
     } on DioError catch (e) {
