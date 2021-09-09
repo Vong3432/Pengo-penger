@@ -40,6 +40,7 @@ class BookingItemApiProvider {
       final response = await _apiHelper.post(
         '/penger/booking-items',
         data: await model.toMap(),
+        isFormData: true,
       );
       debugPrint(response.toString());
       return ResponseModel.fromResponse(response);
@@ -54,6 +55,7 @@ class BookingItemApiProvider {
       final response = await _apiHelper.put(
         '/penger/booking-items/${model.id}',
         data: await model.toMap(),
+        isFormData: true,
       );
       return ResponseModel.fromResponse(response);
     } catch (e) {

@@ -79,10 +79,13 @@ class ApiHelper {
       Map<String, dynamic>? queryParameters,
       Options? options,
       CancelToken? cancelToken,
+      bool? isFormData,
       void Function(int, int)? onSendProgress,
       void Function(int, int)? onReceiveProgress}) async {
     return _dio.post(url,
-        data: data != null ? data : null,
+        data: data != null
+            ? (isFormData == true ? FormData.fromMap(data) : data)
+            : null,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,
@@ -94,11 +97,14 @@ class ApiHelper {
       {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
       Options? options,
+      bool? isFormData,
       CancelToken? cancelToken,
       void Function(int, int)? onSendProgress,
       void Function(int, int)? onReceiveProgress}) async {
     return _dio.put(url,
-        data: data != null ? data : null,
+        data: data != null
+            ? (isFormData == true ? FormData.fromMap(data) : data)
+            : null,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,
