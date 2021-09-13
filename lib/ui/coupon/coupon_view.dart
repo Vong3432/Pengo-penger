@@ -175,7 +175,7 @@ class _CouponViewPageState extends State<CouponViewPage> {
           ),
           CustomTextField(
             validator: _percentagePointsValidator,
-            label: "Discount amount",
+            label: "Discount percentage",
             inputType: const TextInputType.numberWithOptions(decimal: true),
             controller: _discountPercentageController,
             hintText: "",
@@ -468,7 +468,6 @@ class _CouponViewPageState extends State<CouponViewPage> {
       });
       return;
     }
-
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final List<int> ids =
@@ -533,14 +532,12 @@ class _CouponViewPageState extends State<CouponViewPage> {
   }
 
   void _setValueToTextFields(Coupon coupon) {
+    _startFrom = DateTime.parse(coupon.validFrom).toLocal();
+    _endAt = DateTime.parse(coupon.validTo).toLocal();
     _nameController.text = coupon.title;
     _discountPercentageController.text = coupon.discountPercentage.toString();
     _descriptionController.text = coupon.description ?? '';
     _quantityController.text = coupon.quantity.toString();
-    setState(() {
-      _startFrom = DateTime.parse(coupon.validFrom);
-      _endAt = DateTime.parse(coupon.validTo);
-    });
     _startFromController.text = DateFormat.yMEd().add_jms().format(_startFrom);
     _endAtController.text = DateFormat.yMEd().add_jms().format(_endAt);
     _minimumCreditPointsController.text = coupon.minCreditPoints.toString();

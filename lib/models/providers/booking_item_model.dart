@@ -242,10 +242,10 @@ class BookingItemModel with ChangeNotifier {
     }
 
     if (item.startFrom != null) {
-      _startFrom = item.startFrom;
+      _startFrom = item.startFrom!.toLocal();
     }
     if (item.endAt != null) {
-      _endAt = item.endAt;
+      _endAt = item.endAt!.toLocal();
     }
     notifyListeners();
   }
