@@ -53,6 +53,9 @@ class _CouponViewPageState extends State<CouponViewPage> {
   final _minCreditPointsValidator = MultiValidator([
     RequiredValidator(errorText: 'Minimum credit points cannot be empty'),
   ]);
+  final _percentagePointsValidator = MultiValidator([
+    RequiredValidator(errorText: 'Discount percentage field cannot be empty'),
+  ]);
 
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
@@ -61,6 +64,7 @@ class _CouponViewPageState extends State<CouponViewPage> {
   late TextEditingController _endAtController;
   late TextEditingController _minimumCreditPointsController;
   late TextEditingController _requiredCreditPointsController;
+  late TextEditingController _discountPercentageController;
 
   late DateTime _startFrom;
   late DateTime _endAt;
@@ -80,6 +84,7 @@ class _CouponViewPageState extends State<CouponViewPage> {
     _quantityController = TextEditingController();
     _startFromController = TextEditingController();
     _endAtController = TextEditingController();
+    _discountPercentageController = TextEditingController(text: 0.toString());
     _minimumCreditPointsController = TextEditingController(text: 0.toString());
     _requiredCreditPointsController = TextEditingController(text: 0.toString())
       ..addListener(() {
@@ -105,6 +110,7 @@ class _CouponViewPageState extends State<CouponViewPage> {
           key: _formKey,
           child: Scaffold(
             body: CustomScrollView(
+              physics: const ScrollPhysics(),
               slivers: <Widget>[
                 CustomSliverAppBar(
                   title: Text(
@@ -166,6 +172,20 @@ class _CouponViewPageState extends State<CouponViewPage> {
             controller: _descriptionController,
             hintText: "Shop sales",
             isOptional: true,
+          ),
+          CustomTextField(
+            validator: _percentagePointsValidator,
+            label: "Discount amount",
+            inputType: const TextInputType.numberWithOptions(decimal: true),
+            controller: _discountPercentageController,
+            hintText: "",
+            sideNote: Text(
+              "eg: 100.0 = 100%",
+              style: PengoStyle.smallerText(context).copyWith(
+                color: grayTextColor,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
           CustomTextField(
             label: "Quantity",
@@ -379,19 +399,13 @@ class _CouponViewPageState extends State<CouponViewPage> {
     if (_requiredCreditPointsController.text.isEmpty) {
       return true;
     }
+
     final double _required =
         double.tryParse(_requiredCreditPointsController.text) ?? 0;
     final double _min =
         double.tryParse(_minimumCreditPointsController.text) ?? 0;
 
     final bool result = _required >= _min;
-
-    if (result) {
-      setState(() {
-        _errRequiredMsg = "";
-      });
-    }
-
     return result;
   }
 
@@ -467,6 +481,8 @@ class _CouponViewPageState extends State<CouponViewPage> {
             Coupon(
               id: widget.id,
               itemIds: ids,
+              discountPercentage:
+                  double.parse(_discountPercentageController.text),
               title: _nameController.text,
               description: _descriptionController.text,
               validFrom: DateFormat('yyyy-MM-dd hh:mm:ss').format(_startFrom),
@@ -488,6 +504,8 @@ class _CouponViewPageState extends State<CouponViewPage> {
           CreateCouponEvent(
             Coupon(
               itemIds: ids,
+              discountPercentage:
+                  double.parse(_discountPercentageController.text),
               title: _nameController.text,
               description: _descriptionController.text,
               validFrom: DateFormat('yyyy-MM-dd hh:mm:ss').format(_startFrom),
@@ -516,6 +534,7 @@ class _CouponViewPageState extends State<CouponViewPage> {
 
   void _setValueToTextFields(Coupon coupon) {
     _nameController.text = coupon.title;
+    _discountPercentageController.text = coupon.discountPercentage.toString();
     _descriptionController.text = coupon.description ?? '';
     _quantityController.text = coupon.quantity.toString();
     setState(() {

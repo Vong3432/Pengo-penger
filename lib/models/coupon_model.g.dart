@@ -23,6 +23,7 @@ Coupon _$CouponFromJson(Map<String, dynamic> json) {
     bookingItems: (json['booking_items'] as List<dynamic>?)
         ?.map((e) => BookingItem.fromJson(e as Map<String, dynamic>))
         .toList(),
+    discountPercentage: (json['discount_percentage'] as num).toDouble(),
   );
 }
 
@@ -34,6 +35,7 @@ Map<String, dynamic> _$CouponToJson(Coupon instance) => <String, dynamic>{
       'required_credit_points': instance.requiredCreditPoints,
       'valid_from': instance.validFrom,
       'valid_to': instance.validTo,
+      'discount_percentage': instance.discountPercentage,
       'quantity': instance.quantity,
       'is_redeemable': instance.isRedeemable,
       'only_to_items': instance.itemIds,

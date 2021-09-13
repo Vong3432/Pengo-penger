@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 60.0),
+        padding: EdgeInsets.only(bottom: mediaQuery(context).size.height * 0.1),
         child: Align(
           alignment: Alignment.bottomRight,
           child: FloatingActionButton(

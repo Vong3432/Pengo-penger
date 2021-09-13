@@ -56,6 +56,7 @@ class CouponApiProvider {
 
   Future<ResponseModel> editCoupon(Coupon coupon) async {
     try {
+      debugPrint("coupon: ${coupon.toJson()}");
       final response = await _apiHelper.put(
         '/penger/coupons/${coupon.id}',
         data: coupon.toJson(),

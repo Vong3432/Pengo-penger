@@ -19,6 +19,7 @@ class Coupon {
     required this.isRedeemable,
     this.itemIds,
     this.bookingItems,
+    required this.discountPercentage,
     // required this.createdBy,
   });
 
@@ -64,6 +65,9 @@ class Coupon {
 
   @JsonKey(name: 'valid_to')
   final String validTo;
+
+  @JsonKey(name: 'discount_percentage')
+  final double discountPercentage;
 
   final int quantity;
 
