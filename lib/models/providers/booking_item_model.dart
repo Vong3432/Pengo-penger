@@ -208,8 +208,8 @@ class BookingItemModel with ChangeNotifier {
     map["maximum_book"] = _maxBook;
     map["preserved_book"] = boolToInt(_isPreserveable);
     map["price"] = _price;
-    map["start_from"] = DateFormat("yyyy-MM-dd hh:mm:ss").format(_startFrom!);
-    map["end_at"] = DateFormat("yyyy-MM-dd hh:mm:ss").format(_endAt!);
+    map["start_from"] = DateFormat("yyyy-MM-dd HH:mm:ss").format(_startFrom!);
+    map["end_at"] = DateFormat("yyyy-MM-dd HH:mm:ss").format(_endAt!);
     map["quantity"] = _quantity;
 
     // Add all other fields

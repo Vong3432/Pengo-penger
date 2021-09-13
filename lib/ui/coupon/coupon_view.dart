@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -484,8 +485,8 @@ class _CouponViewPageState extends State<CouponViewPage> {
                   double.parse(_discountPercentageController.text),
               title: _nameController.text,
               description: _descriptionController.text,
-              validFrom: DateFormat('yyyy-MM-dd hh:mm:ss').format(_startFrom),
-              validTo: DateFormat('yyyy-MM-dd hh:mm:ss').format(_endAt),
+              validFrom: DateFormat('yyyy-MM-dd HH:mm:ss').format(_startFrom),
+              validTo: DateFormat('yyyy-MM-dd HH:mm:ss').format(_endAt),
               quantity: int.parse(_quantityController.text),
               minCreditPoints:
                   double.parse(_minimumCreditPointsController.text),
@@ -507,8 +508,8 @@ class _CouponViewPageState extends State<CouponViewPage> {
                   double.parse(_discountPercentageController.text),
               title: _nameController.text,
               description: _descriptionController.text,
-              validFrom: DateFormat('yyyy-MM-dd hh:mm:ss').format(_startFrom),
-              validTo: DateFormat('yyyy-MM-dd hh:mm:ss').format(_endAt),
+              validFrom: DateFormat('yyyy-MM-dd HH:mm:ss').format(_startFrom),
+              validTo: DateFormat('yyyy-MM-dd HH:mm:ss').format(_endAt),
               quantity: int.parse(_quantityController.text),
               minCreditPoints:
                   double.parse(_minimumCreditPointsController.text),
