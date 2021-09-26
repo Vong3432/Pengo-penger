@@ -218,11 +218,11 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
     debugPrint(record['record']['id'].toString());
 
-    _api.post('socket-join', data: fd);
+    _api.post('verify-pass', data: fd);
 
     final Socket instance = _socketHelper.getSocket;
     instance.on("rest-join", (data) {
-      instance.emit("join", data);
+      instance.emit("join-pass", data);
     });
 
     instance.on("joined room", (data) {
@@ -236,12 +236,12 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
     instance.on("verified success", (data) {
       debugPrint('success');
-      _showToast(successColor, "Verified");
+      _showToast(successColor, (data["msg"] ?? "Verified").toString());
     });
 
     instance.on("verified failed", (data) {
       debugPrint('failed');
-      _showToast(successColor, "Verified failed");
+      _showToast(successColor, (data["msg"] ?? "Verified failed").toString());
     });
 
     instance.on("unauthorized", (data) {
