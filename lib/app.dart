@@ -1,5 +1,4 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,42 +23,35 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  // final _navigatorKey = GlobalKey<NavigatorState>();
-  final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = const HomePage();
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
   void _onBottomNavItemTapped(int idx) {
     Widget screen;
     switch (idx) {
       case 0:
         // home
-        screen = const HomePage();
-        // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
         break;
       case 1:
         // goocard
-        screen = const CouponPage();
-        // _navigatorKey.currentState!
-        //     .pushNamedAndRemoveUntil('/goocard', (_) => false);
+        _navigatorKey.currentState!
+            .pushNamedAndRemoveUntil('/coupons', (_) => false);
         break;
       case 2:
         // history
-        screen = const NotificationPage();
-        // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        _navigatorKey.currentState!
+            .pushNamedAndRemoveUntil('/notifications', (_) => false);
         break;
       case 3:
         // profile
-        screen = const ProfilePage();
-        // _navigatorKey.currentState!
-        //     .pushNamedAndRemoveUntil('/profile', (_) => false);
+        _navigatorKey.currentState!
+            .pushNamedAndRemoveUntil('/profile', (_) => false);
         break;
       default:
-        screen = const HomePage();
-      // _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
+        _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
     }
 
     setState(() {
-      currentScreen = screens[idx];
       _selectedIndex = idx;
     });
   }
@@ -78,7 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (widget.idx != null) {
       setState(() {
-        currentScreen = screens[widget.idx!];
         _selectedIndex = widget.idx!;
       });
     }
@@ -102,12 +93,51 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       extendBody: true,
-      body: PageStorage(bucket: bucket, child: currentScreen),
+      // body: PageStorage(bucket: bucket, child: currentScreen),
+      body: WillPopScope(
+        onWillPop: () async {
+          if (_navigatorKey.currentState!.canPop()) {
+            _navigatorKey.currentState!.pop();
+            return false;
+          }
+          return true;
+        },
+        child: Navigator(
+          key: _navigatorKey,
+          initialRoute: '/',
+          onGenerateRoute: (RouteSettings settings) {
+            WidgetBuilder builder;
+            // Manage your route names here
+            switch (settings.name) {
+              case '/':
+                builder = (BuildContext context) => HomePage();
+                break;
+              case '/coupons':
+                builder = (BuildContext context) => CouponPage();
+                break;
+              case '/notifications':
+                builder = (BuildContext context) => NotificationPage();
+                break;
+              case '/profile':
+                builder = (BuildContext context) => ProfilePage();
+                break;
+              default:
+                throw Exception('Invalid route: ${settings.name}');
+            }
+            // You can also return a PageRouteBuilder and
+            // define custom transitions between pages
+            return CupertinoPageRoute(
+              builder: builder,
+              settings: settings,
+            );
+          },
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         heroTag: "scan ",
         onPressed: () {
-          Navigator.of(context).push(CupertinoPageRoute(
+          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
             builder: (context) => QRScannerPage(),
           ));
         },
