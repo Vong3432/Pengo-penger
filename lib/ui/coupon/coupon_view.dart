@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -17,6 +14,7 @@ import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/models/booking_item_model.dart';
 import 'package:penger/models/coupon_model.dart';
+import 'package:penger/ui/widgets/api/loading.dart';
 import 'package:penger/ui/widgets/button/custom_button.dart';
 import 'package:penger/ui/widgets/input/custom_textfield.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
@@ -137,9 +135,7 @@ class _CouponViewPageState extends State<CouponViewPage> {
                       }
                     }, builder: (BuildContext context, ViewCouponState state) {
                       if (widget.isEditing && state is ViewCouponLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const LoadingWidget();
                       }
                       if (widget.isEditing == false ||
                           state is ViewCouponLoaded) {
@@ -351,9 +347,7 @@ class _CouponViewPageState extends State<CouponViewPage> {
         },
         builder: (BuildContext context, EditCouponState state) {
           if (state is EditCouponLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const LoadingWidget();
           }
           return CustomButton(
             text: const Text("Save"),
@@ -383,9 +377,7 @@ class _CouponViewPageState extends State<CouponViewPage> {
         },
         builder: (BuildContext context, AddCouponState state) {
           if (state is AddCouponLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const LoadingWidget();
           }
           return CustomButton(
             text: const Text("Save"),
@@ -430,9 +422,7 @@ class _CouponViewPageState extends State<CouponViewPage> {
         return BlocBuilder<ViewItemBloc, ViewBookingItemState>(
           builder: (BuildContext context, ViewBookingItemState state) {
             if (state is BookingItemsLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const LoadingWidget();
             }
             if (state is BookingItemsLoaded) {
               final List<MultiSelectItem<BookingItem>> _items = state.items

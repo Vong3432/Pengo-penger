@@ -12,6 +12,7 @@ import 'package:penger/ui/booking-item/form_step_configure.dart';
 import 'package:penger/ui/booking-item/form_step_info.dart';
 import 'package:penger/ui/booking-item/form_step_reward.dart';
 import 'package:penger/ui/booking-item/widgets/item_step_tile.dart';
+import 'package:penger/ui/widgets/api/loading.dart';
 import 'package:penger/ui/widgets/button/custom_button.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
@@ -154,7 +155,7 @@ class _AddItemViewState extends State<AddItemView> {
                     },
                     builder: (context, state) {
                       if (state is AddBookingItemLoading) {
-                        return const CircularProgressIndicator();
+                        return const LoadingWidget();
                       } else {
                         return _isStepFiveCompleted()
                             ? CustomButton(

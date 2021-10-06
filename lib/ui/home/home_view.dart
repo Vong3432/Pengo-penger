@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:penger/bloc/booking-categories/booking_category_bloc.dart';
+import 'package:penger/bloc/booking-categories/view/view_booking_category_bloc.dart';
 import 'package:penger/bloc/booking-items/view/view_booking_item_bloc.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/const/space_const.dart';
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadCategories() {
-    BlocProvider.of<BookingCategoryBloc>(context)
+    BlocProvider.of<ViewBookingCategoryBloc>(context)
         .add(FetchBookingCategoriesEvent());
     BlocProvider.of<ViewItemBloc>(context).add(FetchBookingItemsEvent());
   }
@@ -204,10 +204,10 @@ class _HomePageState extends State<HomePage> {
     return Container();
   }
 
-  BlocBuilder<BookingCategoryBloc, BookingCategoryState> _buildCategories(
-      BuildContext context) {
+  BlocBuilder<ViewBookingCategoryBloc, ViewBookingCategoryState>
+      _buildCategories(BuildContext context) {
     return BlocBuilder(
-      builder: (BuildContext context, BookingCategoryState state) {
+      builder: (BuildContext context, ViewBookingCategoryState state) {
         if (state is BookingCategoriesLoading) {
           return const SkeletonText(
             height: 25,
@@ -251,7 +251,7 @@ class _HomePageState extends State<HomePage> {
         }
         return Container();
       },
-      bloc: BlocProvider.of<BookingCategoryBloc>(context),
+      bloc: BlocProvider.of<ViewBookingCategoryBloc>(context),
     );
   }
 

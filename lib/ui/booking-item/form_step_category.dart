@@ -1,12 +1,13 @@
-import 'package:checkbox_grouped/checkbox_grouped.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:penger/bloc/booking-categories/booking_category_bloc.dart';
+import 'package:penger/bloc/booking-categories/view/view_booking_category_bloc.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/booking_category_model.dart';
 import 'package:penger/models/providers/booking_item_model.dart';
+import 'package:penger/ui/booking-category/category_list_view.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
@@ -35,9 +36,24 @@ class _FormStepCategoryState extends State<FormStepCategory> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              "Select category",
-              style: PengoStyle.header(context),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "Select category",
+                  style: PengoStyle.header(context),
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => CategoryListPage()));
+                  },
+                  icon: const Icon(Icons.add),
+                ),
+              ],
             ),
             _buildCategories(context),
           ],
@@ -46,10 +62,10 @@ class _FormStepCategoryState extends State<FormStepCategory> {
     );
   }
 
-  BlocBuilder<BookingCategoryBloc, BookingCategoryState> _buildCategories(
-      BuildContext context) {
+  BlocBuilder<ViewBookingCategoryBloc, ViewBookingCategoryState>
+      _buildCategories(BuildContext context) {
     return BlocBuilder(
-      builder: (BuildContext context, BookingCategoryState state) {
+      builder: (BuildContext context, ViewBookingCategoryState state) {
         if (state is BookingCategoriesLoading) {
           return const SkeletonText(
             height: 25,
@@ -82,7 +98,7 @@ class _FormStepCategoryState extends State<FormStepCategory> {
                     backgroundColor: primaryLightColor,
                     selected: isSelected,
                     onSelected: (bool v) {
-                      context.read<BookingItemModel>().setCategoryId(cat.id);
+                      context.read<BookingItemModel>().setCategoryId(cat.id!);
                     },
                   );
                 }),
@@ -90,12 +106,12 @@ class _FormStepCategoryState extends State<FormStepCategory> {
         }
         return Container();
       },
-      bloc: BlocProvider.of<BookingCategoryBloc>(context),
+      bloc: BlocProvider.of<ViewBookingCategoryBloc>(context),
     );
   }
 
   void _loadCategories() {
-    BlocProvider.of<BookingCategoryBloc>(context)
+    BlocProvider.of<ViewBookingCategoryBloc>(context)
         .add(FetchBookingCategoriesEvent());
   }
 
