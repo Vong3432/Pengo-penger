@@ -6,9 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:penger/const/locale_const.dart';
 import 'package:penger/helpers/formatter/bool_to_int.dart';
 import 'package:penger/models/booking_item_model.dart';
+import 'package:penger/models/condition_model.dart';
+import 'package:penger/models/dpo_column_model.dart';
+import 'package:penger/models/dpo_table_model.dart';
 
+/// Used as a state for adding/editing booking item.
 class BookingItemModel with ChangeNotifier {
   int? _id;
   int? _categoryId;
@@ -28,13 +33,69 @@ class BookingItemModel with ChangeNotifier {
   int? _maxTransfer;
   int? _maxBook;
   int? _quantity;
-  int? _preservedBook;
+  int? _preservedBookAmount;
   double? _discountAmount = 0;
   double? _lng;
   double? _lat;
+  bool _isStepThreeDone = false;
   bool _isStepFourDone = false;
+  TIME_GAP_UNITS _timeGapUnits = TIME_GAP_UNITS.minutes; // default: Minutes
+  int _timeGapValue = 5; // default: 5
+
+  DpoColumn? _dpoCol;
+  DpoTable? _dpoTable;
+  Condition? _condition;
+  String? _priorityValue;
 
   int? get id => _id;
+
+  void setDpoCol(DpoColumn value) {
+    _dpoCol = value;
+    notifyListeners();
+  }
+
+  DpoColumn? get dpoCol => _dpoCol;
+
+  void setDpoTable(DpoTable value) {
+    _dpoTable = value;
+    notifyListeners();
+  }
+
+  DpoTable? get dpoTable => _dpoTable;
+
+  void setCondition(Condition value) {
+    _condition = value;
+    notifyListeners();
+  }
+
+  Condition? get condition => _condition;
+
+  void setPriorityValue(String value) {
+    _priorityValue = value;
+    notifyListeners();
+  }
+
+  String? get priorityValue => _priorityValue;
+
+  void setPreservedBookAmount(int value) {
+    _preservedBookAmount = value;
+    notifyListeners();
+  }
+
+  int? get preservedBookAmount => _preservedBookAmount;
+
+  void setTimeGapValue(int value) {
+    _timeGapValue = value;
+  }
+
+  int get timeGapValue => _timeGapValue;
+
+  void setTimeGapUnit(TIME_GAP_UNITS unit) {
+    _timeGapUnits = unit;
+    notifyListeners();
+  }
+
+  TIME_GAP_UNITS get timeGapUnits => _timeGapUnits;
 
   void setPosterUrl(String url) {
     _posterUrl = url;
@@ -84,6 +145,13 @@ class BookingItemModel with ChangeNotifier {
   }
 
   int? get maxTransfer => _maxTransfer;
+
+  void setIsStepThreeDone(bool v) {
+    _isStepThreeDone = v;
+    notifyListeners();
+  }
+
+  bool get isStepThreeDone => _isStepThreeDone;
 
   void setIsStepFourDone(bool v) {
     _isStepFourDone = v;
@@ -170,7 +238,6 @@ class BookingItemModel with ChangeNotifier {
   XFile? get poster => _poster;
 
   void setStartFrom(DateTime v) {
-    debugPrint(v.toString());
     _startFrom = v;
     notifyListeners();
   }
@@ -206,18 +273,29 @@ class BookingItemModel with ChangeNotifier {
     map["credit_points"] = _creditPoints;
     map["maximum_transfer"] = _maxTransfer;
     map["maximum_book"] = _maxBook;
-    map["preserved_book"] = boolToInt(_isPreserveable);
+    map["preserved_book"] = _preservedBookAmount;
     map["price"] = _price;
-    map["start_from"] = DateFormat("yyyy-MM-dd HH:mm:ss").format(_startFrom!);
-    map["end_at"] = DateFormat("yyyy-MM-dd HH:mm:ss").format(_endAt!);
+    if (_startFrom != null) {
+      map["start_from"] = DateFormat("yyyy-MM-dd HH:mm:ss").format(_startFrom!);
+    }
+    if (_endAt != null) {
+      map["end_at"] = DateFormat("yyyy-MM-dd HH:mm:ss").format(_endAt!);
+    }
     map["quantity"] = _quantity;
+    map["time_gap_units"] = _timeGapUnits.toString().split('.').last;
+    map["time_gap_value"] = _timeGapValue;
+
+    map["priority_option"] = {
+      "dpo_col_id": _dpoCol?.id,
+      "value": _priorityValue,
+      "condition": _condition?.symbolValue
+    };
 
     // Add all other fields
     return map;
   }
 
   void setBookingItem(BookingItem item) {
-    debugPrint("ITEM: ${item.categoryId}");
     _id = item.id;
     _categoryId = item.categoryId;
     _isCountable = item.isCountable ?? false;
@@ -234,6 +312,11 @@ class BookingItemModel with ChangeNotifier {
     _quantity = item.quantity;
     _maxTransfer = item.maxTransfer;
     _maxBook = item.maxBook;
+    _preservedBookAmount = item.preservedBook;
+    _isPreserveable = item.isPreserveable ?? false;
+    _isTransferable = item.isTransferable ?? false;
+    _isCountable = item.isCountable ?? false;
+    _isDiscountable = item.isDiscountable ?? false;
 
     if (item.location != null) {
       _location = item.location!;
@@ -246,6 +329,16 @@ class BookingItemModel with ChangeNotifier {
     }
     if (item.endAt != null) {
       _endAt = item.endAt!.toLocal();
+    }
+    _timeGapValue = item.timeGapValue;
+    _timeGapUnits = item.timeGapUnits;
+
+    if (item.priorityOption != null) {
+      _condition = conditionList.firstWhere(
+          (con) => con.symbolValue == item.priorityOption?.conditions);
+      _dpoCol = item.priorityOption?.dpoColumn;
+      _dpoTable = item.priorityOption?.dpoColumn.dpoTable;
+      _priorityValue = item.priorityOption?.value;
     }
     notifyListeners();
   }
@@ -266,6 +359,7 @@ class BookingItemModel with ChangeNotifier {
     _startFrom = null;
     _endAt = null;
     _creditPoints = 0;
+    _isStepThreeDone = false;
     _isStepFourDone = false;
     _lat = null;
     _lng = null;
@@ -273,5 +367,11 @@ class BookingItemModel with ChangeNotifier {
     _maxTransfer = null;
     _quantity = null;
     _discountAmount = null;
+    _timeGapValue = 5;
+    _priorityValue = null;
+    _dpoTable = null;
+    _dpoCol = null;
+    _condition = null;
+    _preservedBookAmount = null;
   }
 }

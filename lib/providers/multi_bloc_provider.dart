@@ -9,6 +9,8 @@ import 'package:penger/bloc/booking-options/edit/edit_booking_option_bloc.dart';
 import 'package:penger/bloc/coupons/view/view_active_coupons_bloc.dart';
 import 'package:penger/bloc/coupons/view/view_coupon_bloc.dart';
 import 'package:penger/bloc/coupons/view/view_expired_coupons_bloc.dart';
+import 'package:penger/bloc/dpo-columns/dpo_columns_bloc.dart';
+import 'package:penger/bloc/dpo-tables/dpo_tables_bloc.dart';
 import 'package:penger/bloc/system-functions/view/view_system_functions_bloc.dart';
 
 List<BlocProvider<dynamic>> multiBlocProviders(BuildContext context) {

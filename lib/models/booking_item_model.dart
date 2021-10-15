@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:penger/const/locale_const.dart';
 import 'package:penger/models/geolocation_model.dart';
+import 'package:penger/models/priority_option_model.dart';
 
 part 'booking_item_model.g.dart';
 
@@ -15,6 +13,8 @@ class BookingItem extends Equatable {
     required this.isActive,
     required this.title,
     required this.id,
+    required this.timeGapUnits,
+    required this.timeGapValue,
     this.price,
     this.availableFrom,
     this.availableTo,
@@ -33,6 +33,7 @@ class BookingItem extends Equatable {
     this.categoryId,
     this.description,
     this.geolocation,
+    this.priorityOption,
   });
 
   factory BookingItem.fromJson(Map<String, dynamic> json) {
@@ -109,6 +110,15 @@ class BookingItem extends Equatable {
 
   @JsonKey(name: 'geolocation', includeIfNull: false)
   final Geolocation? geolocation;
+
+  @JsonKey(name: 'time_gap_units')
+  final TIME_GAP_UNITS timeGapUnits;
+
+  @JsonKey(name: 'time_gap_value')
+  final int timeGapValue;
+
+  @JsonKey(name: 'priority_option')
+  final PriorityOption? priorityOption;
 
   @override
   // TODO: implement props

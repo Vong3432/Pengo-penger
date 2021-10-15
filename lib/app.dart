@@ -23,10 +23,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  final _bottomBarKey = GlobalKey();
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   void _onBottomNavItemTapped(int idx) {
-    Widget screen;
     switch (idx) {
       case 0:
         // home
@@ -34,15 +34,19 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case 1:
         // goocard
-        _navigatorKey.currentState!
-            .pushNamedAndRemoveUntil('/coupons', (_) => false);
+
         break;
       case 2:
         // history
         _navigatorKey.currentState!
-            .pushNamedAndRemoveUntil('/notifications', (_) => false);
+            .pushNamedAndRemoveUntil('/scan', (_) => false);
         break;
       case 3:
+        // history
+        _navigatorKey.currentState!
+            .pushNamedAndRemoveUntil('/notifications', (_) => false);
+        break;
+      case 4:
         // profile
         _navigatorKey.currentState!
             .pushNamedAndRemoveUntil('/profile', (_) => false);
@@ -59,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<String> _icons = <String>[
     HOME_ICON_PATH,
     COUPON_ICON_PATH,
+    SCAN_ICON_PATH,
     NOTIFICATION_ICON_PATH,
     PROFILE_ICON_PATH,
   ];
@@ -115,6 +120,9 @@ class _MyHomePageState extends State<MyHomePage> {
               case '/coupons':
                 builder = (BuildContext context) => CouponPage();
                 break;
+              case '/scan':
+                builder = (BuildContext context) => QRScannerPage();
+                break;
               case '/notifications':
                 builder = (BuildContext context) => NotificationPage();
                 break;
@@ -128,77 +136,36 @@ class _MyHomePageState extends State<MyHomePage> {
             // define custom transitions between pages
             return CupertinoPageRoute(
               builder: builder,
+              maintainState: false,
               settings: settings,
             );
           },
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        heroTag: "scan ",
-        onPressed: () {
-          Navigator.of(context, rootNavigator: true).push(CupertinoPageRoute(
-            builder: (context) => QRScannerPage(),
-          ));
-        },
-        tooltip: 'Scan',
-        backgroundColor: whiteColor,
-        child: SvgPicture.asset(
-          SCAN_ICON_PATH,
-          color: primaryColor,
-        ),
-      ),
-      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-        itemCount: 4,
-        tabBuilder: (int index, bool isActive) {
+      bottomNavigationBar: BottomNavigationBar(
+        items: List.generate(_icons.length, (int index) {
           final Color color = _selectedIndex == index
               ? primaryColor
-              : textColor.withOpacity(0.65);
-          return SvgPicture.asset(
-            _icons[index],
-            color: color,
-            width: 27,
-            height: 27,
-            fit: BoxFit.scaleDown,
-          );
-        },
-        splashColor: greyBgColor,
-        elevation: 17,
-        backgroundColor: whiteColor,
-        activeIndex: _selectedIndex,
-        onTap: _onBottomNavItemTapped,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.defaultEdge,
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-
-  // ignore: avoid_positional_boolean_parameters
-  Stack navIcon(bool show, IconData icon) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.topRight,
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: primaryColor,
-              ),
-              width: show ? 8 : 0,
-              height: show ? 8 : 0,
+              : textColor.withOpacity(0.5);
+          return BottomNavigationBarItem(
+            label: "",
+            icon: SvgPicture.asset(
+              _icons[index],
+              color: color,
+              width: 27,
+              height: 27,
+              fit: BoxFit.scaleDown,
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(3.0),
-          child: Icon(
-            icon,
-            size: 27,
-            color: textColor,
-          ),
-        ),
-      ],
+          );
+        }),
+        elevation: 17,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: whiteColor,
+        currentIndex: _selectedIndex,
+        onTap: _onBottomNavItemTapped,
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

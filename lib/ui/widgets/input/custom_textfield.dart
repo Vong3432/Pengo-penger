@@ -7,7 +7,7 @@ import 'package:penger/helpers/theme/custom_font.dart';
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     Key? key,
-    required this.label,
+    this.label,
     required this.hintText,
     this.onChanged,
     this.obsecureText,
@@ -27,7 +27,7 @@ class CustomTextField extends StatelessWidget {
     this.onEditingComplete,
   }) : super(key: key);
 
-  final String label;
+  final String? label;
   final String hintText;
   final void Function(String value)? onChanged;
   final void Function(String? value)? onSaved;
@@ -53,11 +53,12 @@ class CustomTextField extends StatelessWidget {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Text(
-              label,
-              style: lblStyle ?? PengoStyle.caption(context),
-            ),
-            const Spacer(),
+            if (label != null)
+              Text(
+                label!,
+                style: lblStyle ?? PengoStyle.caption(context),
+              ),
+            if (label != null) const Spacer(),
             if (isOptional == true)
               Text(
                 "(optional)",
@@ -70,9 +71,10 @@ class CustomTextField extends StatelessWidget {
               Container()
           ],
         ),
-        const SizedBox(
-          height: 10,
-        ),
+        if (label != null)
+          const SizedBox(
+            height: 10,
+          ),
         TextFormField(
           onTap: onTap,
           onEditingComplete: onEditingComplete,

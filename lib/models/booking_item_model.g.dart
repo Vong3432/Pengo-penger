@@ -12,6 +12,8 @@ BookingItem _$BookingItemFromJson(Map<String, dynamic> json) {
     isActive: json['is_active'] as bool,
     title: json['name'] as String,
     id: json['id'] as int,
+    timeGapUnits: _$enumDecode(_$TIME_GAP_UNITSEnumMap, json['time_gap_units']),
+    timeGapValue: json['time_gap_value'] as int,
     price: (json['price'] as num?)?.toDouble(),
     availableFrom: json['available_from'] as String?,
     availableTo: json['available_to'] as String?,
@@ -36,6 +38,10 @@ BookingItem _$BookingItemFromJson(Map<String, dynamic> json) {
     geolocation: json['geolocation'] == null
         ? null
         : Geolocation.fromJson(json['geolocation'] as Map<String, dynamic>),
+    priorityOption: json['priority_option'] == null
+        ? null
+        : PriorityOption.fromJson(
+            json['priority_option'] as Map<String, dynamic>),
   );
 }
 
@@ -71,5 +77,40 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
   val['booking_category_id'] = instance.categoryId;
   writeNotNull('description', instance.description);
   writeNotNull('geolocation', instance.geolocation);
+  val['time_gap_units'] = _$TIME_GAP_UNITSEnumMap[instance.timeGapUnits];
+  val['time_gap_value'] = instance.timeGapValue;
+  val['priority_option'] = instance.priorityOption;
   return val;
 }
+
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
+  }
+
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
+}
+
+const _$TIME_GAP_UNITSEnumMap = {
+  TIME_GAP_UNITS.hours: 'hours',
+  TIME_GAP_UNITS.seconds: 'seconds',
+  TIME_GAP_UNITS.minutes: 'minutes',
+};

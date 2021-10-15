@@ -1,13 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:penger/bloc/booking-categories/create/create_booking_category_bloc.dart';
-import 'package:penger/bloc/booking-categories/edit/edit_booking_category_bloc.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/models/booking_category_model.dart';
-import 'package:penger/ui/booking-category/category_view.dart';
 
 class CategoryListTile extends StatefulWidget {
   const CategoryListTile(

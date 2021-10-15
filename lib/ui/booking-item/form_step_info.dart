@@ -27,7 +27,8 @@ class _FormStepInfoState extends State<FormStepInfo> {
   late TextEditingController _locationController;
   late TextEditingController _descriptionController;
   late TextEditingController _priceController;
-  final ImagePicker _picker = ImagePicker();
+  final ImagePicker _picker =
+      ImagePicker(); // TODO: Replace with another image picker plugin.
 
   List<GeocodingResult> geocodingResults = [];
 
@@ -109,10 +110,10 @@ class _FormStepInfoState extends State<FormStepInfo> {
                     onTap: () async {
                       final XFile? poster = await _picker.pickImage(
                           source: ImageSource.gallery,
-                          imageQuality: 60,
+                          // imageQuality: 60,
                           maxHeight: 480,
                           maxWidth: 640);
-                      if (poster != null) {
+                      if (poster != null && mounted) {
                         context.read<BookingItemModel>().setPoster(poster);
                       } else {
                         return;

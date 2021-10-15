@@ -14,6 +14,9 @@ ThemeData themeData = ThemeData(
         borderSide: BorderSide.none, borderRadius: BorderRadius.circular(8)),
     filled: true,
     fillColor: greyBgColor,
+    hintStyle: TextStyle(
+      color: secondaryTextColor.withOpacity(0.6),
+    ),
   ),
   textTheme: const TextTheme(
     headline1: TextStyle(

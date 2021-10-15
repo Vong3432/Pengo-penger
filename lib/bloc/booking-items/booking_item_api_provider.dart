@@ -44,9 +44,8 @@ class BookingItemApiProvider {
       );
       debugPrint(response.toString());
       return ResponseModel.fromResponse(response);
-    } catch (e) {
-      debugPrint(e.toString());
-      throw Exception((e as DioError).error);
+    } on DioError catch (e) {
+      throw e.response!.data['msg'].toString();
     }
   }
 
@@ -58,8 +57,8 @@ class BookingItemApiProvider {
         isFormData: true,
       );
       return ResponseModel.fromResponse(response);
-    } catch (e) {
-      throw Exception((e as DioError).error);
+    } on DioError catch (e) {
+      throw e.response!.data['msg'].toString();
     }
   }
 }

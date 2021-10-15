@@ -64,11 +64,11 @@ class ProfilePage extends StatelessWidget {
         CustomListItem(
           onTap: () {
             context.read<AuthModel>().logoutUser();
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => LoginPage()),
-                (_) => false);
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(
+                builder: (BuildContext context) => LoginPage(),
+              ),
+            );
           },
           leading: Container(
             width: 42,

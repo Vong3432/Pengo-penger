@@ -188,8 +188,9 @@ class _AddItemViewState extends State<AddItemView> {
 
   bool _isStepThreeCompleted() {
     return _isStepTwoCompleted() &&
-        context.watch<BookingItemModel>().startFrom != null &&
-        context.watch<BookingItemModel>().endAt != null;
+        context.watch<BookingItemModel>().isStepThreeDone;
+    // context.watch<BookingItemModel>().startFrom != null &&
+    // context.watch<BookingItemModel>().endAt != null;
   }
 
   bool _isStepFourCompleted() {
