@@ -18,3 +18,5 @@ const String NOTIFICATION_ICON_PATH = PREFIX_PATH + '/notification.svg';
 const String HOME_ICON_PATH = PREFIX_PATH + '/home.svg';
 const String FUNCTIONS_ICON_PATH = PREFIX_PATH + '/functions.svg';
 const String MONEY_ICON_PATH = PREFIX_PATH + '/money.svg';
+const String ITEMS_ICON_PATH = PREFIX_PATH + '/items.svg';
+const String SELECTED_PENGER_ICON_PATH = PREFIX_PATH + '/selected_penger.svg';

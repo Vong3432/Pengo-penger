@@ -211,7 +211,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildProfileInfo(BuildContext context) {
-    final String _avatar = context.select<AuthModel, String>(
+    final String? _avatar = context.select<AuthModel, String>(
         (AuthModel model) => model.user?.avatar ?? '');
     final String _username = context.select<AuthModel, String>(
         (AuthModel model) => model.user?.username ?? '');
@@ -237,7 +237,7 @@ class ProfilePage extends StatelessWidget {
               minRadius: 27,
               backgroundColor: Colors.transparent,
               backgroundImage: NetworkImage(
-                _avatar,
+                _avatar ?? "",
               ),
             ),
             const SizedBox(

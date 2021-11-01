@@ -39,7 +39,7 @@ class _CategoryViewState extends State<CategoryView> {
     return Material(
       child: Container(
         padding: const EdgeInsets.all(18),
-        height: mediaQuery(context).size.height * 0.75,
+        height: mediaQuery(context).size.height * 1,
         child: _buildViewCategoryContent(context),
       ),
     );

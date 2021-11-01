@@ -18,6 +18,7 @@ class AuthApiProvider {
         "phone": "+6$phone",
         "password": password,
       });
+      debugPrint(response.data.toString());
       final Auth auth =
           Auth.fromJson(response.data!['data'] as Map<String, dynamic>);
       return auth;

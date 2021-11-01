@@ -40,3 +40,29 @@ class PengerLoaded extends PengerState {
 }
 
 class PengerNotLoaded extends PengerState {}
+
+class PengerAdding extends PengerState {}
+
+class PengerAdded extends PengerState {
+  const PengerAdded(this.response);
+  final ResponseModel response;
+}
+
+class PengerNotAdded extends PengerState {
+  const PengerNotAdded(this.e);
+
+  final Object? e;
+}
+
+class PengerUpdating extends PengerState {}
+
+class PengerUpdated extends PengerState {
+  const PengerUpdated(this.response);
+  final ResponseModel response;
+}
+
+class PengerNotUpdated extends PengerState {
+  const PengerNotUpdated(this.e);
+
+  final Object? e;
+}

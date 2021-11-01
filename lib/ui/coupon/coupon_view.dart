@@ -259,6 +259,7 @@ class _CouponViewPageState extends State<CouponViewPage> {
             inputType: TextInputType.number,
             controller: _minimumCreditPointsController,
             hintText: "",
+            isOptional: true,
             sideNote: Text(
               "Max: 5000",
               style: PengoStyle.smallerText(context).copyWith(
@@ -270,7 +271,6 @@ class _CouponViewPageState extends State<CouponViewPage> {
           CustomTextField(
             controller: _requiredCreditPointsController,
             label: "Required credit points",
-            isOptional: true,
             inputType: TextInputType.number,
             hintText: "",
             onChanged: (_) {

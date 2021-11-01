@@ -46,6 +46,9 @@ class ApiHelper {
               "penger_id": auth.selectedPenger!.id.toString()
             };
           }
+
+          // debugPrint("sh $prefs");
+          // debugPrint("qs ${request.queryParameters.toString()}");
         }
         _dio.interceptors.requestLock.unlock();
 

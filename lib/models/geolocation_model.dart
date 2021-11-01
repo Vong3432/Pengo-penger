@@ -12,7 +12,5 @@ class Geolocation {
 
   final double latitude;
   final double longitude;
-
-  @JsonKey(includeIfNull: false)
   final String? name;
 }

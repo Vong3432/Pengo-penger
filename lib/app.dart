@@ -1,14 +1,12 @@
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/const/icon_const.dart';
 import 'package:penger/helpers/notification/push_notification_manager.dart';
-import 'package:penger/helpers/routes/route.dart';
+import 'package:penger/ui/booking-item/item_listing_view.dart';
 import 'package:penger/ui/coupon/coupon_listing_view.dart';
 import 'package:penger/ui/home/home_view.dart';
-import 'package:penger/ui/notification/notification_view.dart';
 import 'package:penger/ui/profile/profile_view.dart';
 import 'package:penger/ui/qr/qr_scanner_view.dart';
 
@@ -33,8 +31,9 @@ class _MyHomePageState extends State<MyHomePage> {
         _navigatorKey.currentState!.pushNamedAndRemoveUntil('/', (_) => false);
         break;
       case 1:
-        // goocard
-
+        // coupon
+        _navigatorKey.currentState!
+            .pushNamedAndRemoveUntil('/coupons', (_) => false);
         break;
       case 2:
         // history
@@ -44,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 3:
         // history
         _navigatorKey.currentState!
-            .pushNamedAndRemoveUntil('/notifications', (_) => false);
+            .pushNamedAndRemoveUntil('/items', (_) => false);
         break;
       case 4:
         // profile
@@ -64,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HOME_ICON_PATH,
     COUPON_ICON_PATH,
     SCAN_ICON_PATH,
-    NOTIFICATION_ICON_PATH,
+    ITEMS_ICON_PATH,
     PROFILE_ICON_PATH,
   ];
 
@@ -123,8 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
               case '/scan':
                 builder = (BuildContext context) => QRScannerPage();
                 break;
-              case '/notifications':
-                builder = (BuildContext context) => NotificationPage();
+              case '/items':
+                builder = (BuildContext context) => ItemsPage();
                 break;
               case '/profile':
                 builder = (BuildContext context) => ProfilePage();
@@ -152,8 +151,8 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: SvgPicture.asset(
               _icons[index],
               color: color,
-              width: 27,
-              height: 27,
+              width: 23,
+              height: 23,
               fit: BoxFit.scaleDown,
             ),
           );

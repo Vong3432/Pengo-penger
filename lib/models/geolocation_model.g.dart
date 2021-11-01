@@ -14,18 +14,9 @@ Geolocation _$GeolocationFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$GeolocationToJson(Geolocation instance) {
-  final val = <String, dynamic>{
-    'latitude': instance.latitude,
-    'longitude': instance.longitude,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('name', instance.name);
-  return val;
-}
+Map<String, dynamic> _$GeolocationToJson(Geolocation instance) =>
+    <String, dynamic>{
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+      'name': instance.name,
+    };
