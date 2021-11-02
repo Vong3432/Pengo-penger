@@ -54,4 +54,7 @@ class PengerRepo {
 
   Future<Penger> fetchPenger(int id) async =>
       _pengerApiProvider.fetchPenger(id);
+
+  Future<int> fetchTotalStaffStat() async =>
+      _pengerApiProvider.fetchTotalStaff();
 }

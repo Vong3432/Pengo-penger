@@ -13,6 +13,11 @@ User _$UserFromJson(Map<String, dynamic> json) {
     id: json['id'] as int,
     email: json['email'] as String,
     phone: json['phone'] as String,
+    age: json['age'] as int?,
+    password: json['password'] as String?,
+    role: json['role'] == null
+        ? null
+        : Role.fromJson(json['role'] as Map<String, dynamic>),
   );
 }
 
@@ -21,5 +26,22 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'username': instance.username,
       'email': instance.email,
       'phone': instance.phone,
+      'password': instance.password,
       'avatar': instance.avatar,
+      'role': instance.role,
+      'age': instance.age,
+    };
+
+Role _$RoleFromJson(Map<String, dynamic> json) {
+  return Role(
+    id: json['id'] as int,
+    name: json['name'] as String,
+    isActive: json['is_active'] as bool,
+  );
+}
+
+Map<String, dynamic> _$RoleToJson(Role instance) => <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'is_active': instance.isActive,
     };

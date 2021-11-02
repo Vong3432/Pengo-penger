@@ -37,7 +37,7 @@ class CurrentPengerHighlight extends StatelessWidget {
               builder: (BuildContext context, AuthModel model, _) {
                 return Text(
                   model.user?.selectedPenger?.name ?? "-",
-                  style: PengoStyle.title(context).copyWith(
+                  style: PengoStyle.title2(context).copyWith(
                     color: textColor,
                   ),
                 );

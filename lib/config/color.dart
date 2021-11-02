@@ -62,6 +62,7 @@ MaterialColor textColor = MaterialColor(0xFF151615, text);
 Color primaryLightColor = const Color(0xFFEDFFE2);
 Color grayTextColor = const Color(0xFF4B5656);
 Color secondaryTextColor = const Color(0xFF727373);
+Color blueColor = const Color(0xFF5D78D9);
 Color greyBgColor = const Color(0xFFF0F0F3);
 Color whiteColor = Colors.white;
 

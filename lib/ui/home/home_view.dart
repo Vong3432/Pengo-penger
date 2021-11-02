@@ -18,6 +18,7 @@ import 'package:penger/models/booking_item_model.dart';
 import 'package:penger/ui/booking-item/add_item_view.dart';
 import 'package:penger/ui/booking-item/edit_item_view.dart';
 import 'package:penger/ui/home/widgets/current_penger_highlight.dart';
+import 'package:penger/ui/home/widgets/stats/member_stat.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
@@ -49,7 +50,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
+    /*24 is for notification bar on Android*/
+    final double itemHeight = mediaQuery(context).size.height * 0.25;
+    final double itemWidth = mediaQuery(context).size.width / 2;
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -60,12 +63,26 @@ class _HomePageState extends State<HomePage> {
             content: <Widget>[
               Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   // ignore: prefer_const_literals_to_create_immutables
-                  children: <Widget>[],
+                  children: <Widget>[
+                    GridView.count(
+                      clipBehavior: Clip.none,
+                      mainAxisSpacing: SECTION_GAP_HEIGHT,
+                      crossAxisSpacing: SECTION_GAP_HEIGHT,
+                      padding: const EdgeInsets.only(bottom: 18),
+                      physics: const NeverScrollableScrollPhysics(),
+                      childAspectRatio: itemWidth / itemHeight,
+                      shrinkWrap: true,
+                      crossAxisCount: 2,
+                      children: const <Widget>[
+                        MemberStat(),
+                      ],
+                    )
+                  ],
                 ),
               ),
             ],

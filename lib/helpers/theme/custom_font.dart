@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 class PengoStyle {
   static TextStyle title(BuildContext context) {
-    return Theme.of(context)
-        .textTheme
-        .headline6!
-        .copyWith(fontWeight: FontWeight.w600);
+    return Theme.of(context).textTheme.headline6!.copyWith(
+          fontWeight: FontWeight.w800,
+          fontSize: 18,
+        );
   }
 
   static TextStyle title2(BuildContext context) {
     return Theme.of(context)
         .textTheme
         .headline6!
-        .copyWith(fontWeight: FontWeight.w500, fontSize: 16);
+        .copyWith(fontWeight: FontWeight.w700, fontSize: 16);
   }
 
   static TextStyle header(BuildContext context) {
@@ -58,16 +58,15 @@ class PengoStyle {
   }
 
   static TextStyle caption(BuildContext context) {
-    return Theme.of(context)
-        .textTheme
-        .caption!
-        .copyWith(fontWeight: FontWeight.w600);
+    return Theme.of(context).textTheme.caption!.copyWith(
+          fontWeight: FontWeight.w700,
+        );
   }
 
   static TextStyle subcaption(BuildContext context) {
-    return Theme.of(context)
-        .textTheme
-        .caption!
-        .copyWith(fontWeight: FontWeight.normal);
+    return Theme.of(context).textTheme.caption!.copyWith(
+          fontWeight: FontWeight.normal,
+          fontSize: 12,
+        );
   }
 }

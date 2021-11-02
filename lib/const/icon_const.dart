@@ -20,3 +20,4 @@ const String FUNCTIONS_ICON_PATH = PREFIX_PATH + '/functions.svg';
 const String MONEY_ICON_PATH = PREFIX_PATH + '/money.svg';
 const String ITEMS_ICON_PATH = PREFIX_PATH + '/items.svg';
 const String SELECTED_PENGER_ICON_PATH = PREFIX_PATH + '/selected_penger.svg';
+const String MEMBERS_ICON_PATH = PREFIX_PATH + '/members.svg';

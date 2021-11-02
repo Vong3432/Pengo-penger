@@ -46,12 +46,10 @@ class _PengerListingViewState extends State<PengerListingView> {
               style: PengoStyle.title2(context),
             ),
             actions: <Widget>[
-              CupertinoButton(
-                child: Text(
-                  "New",
-                  style: PengoStyle.caption(context).copyWith(
-                    color: primaryColor,
-                  ),
+              IconButton(
+                icon: Icon(
+                  Icons.add,
+                  color: primaryColor,
                 ),
                 onPressed: () {
                   showCupertinoModalBottomSheet(
@@ -75,6 +73,7 @@ class _PengerListingViewState extends State<PengerListingView> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Consumer<AuthModel>(
                       builder: (BuildContext context, AuthModel model, _) {
