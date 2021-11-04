@@ -117,6 +117,18 @@ class PengerApiProvider {
     }
   }
 
+  Future<int> fetchTotalBookingToday() async {
+    try {
+      final response = await _apiHelper.get(
+        '/penger/total-booking-today',
+      );
+      final int totalStaff = response.data['data'] as int;
+      return totalStaff;
+    } on DioError catch (e) {
+      throw e.response!.data['msg'].toString();
+    }
+  }
+
   // Future<Penger> fetchBookingItems(int id, {int? limit, int? pageNum}) async {
   //   try {
   //     final response = await _apiHelper.get('/core/pengers/{id}?limit=${limit}',

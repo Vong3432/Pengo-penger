@@ -57,4 +57,7 @@ class PengerRepo {
 
   Future<int> fetchTotalStaffStat() async =>
       _pengerApiProvider.fetchTotalStaff();
+
+  Future<int> fetchTotalBookingToday() async =>
+      _pengerApiProvider.fetchTotalBookingToday();
 }

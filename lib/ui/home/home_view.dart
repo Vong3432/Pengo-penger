@@ -15,10 +15,12 @@ import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/booking_category_model.dart';
 import 'package:penger/models/booking_item_model.dart';
+import 'package:penger/models/providers/auth_model.dart';
 import 'package:penger/ui/booking-item/add_item_view.dart';
 import 'package:penger/ui/booking-item/edit_item_view.dart';
 import 'package:penger/ui/home/widgets/current_penger_highlight.dart';
 import 'package:penger/ui/home/widgets/stats/member_stat.dart';
+import 'package:penger/ui/home/widgets/stats/today_stat.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
@@ -78,8 +80,27 @@ class _HomePageState extends State<HomePage> {
                       childAspectRatio: itemWidth / itemHeight,
                       shrinkWrap: true,
                       crossAxisCount: 2,
-                      children: const <Widget>[
-                        MemberStat(),
+                      children: <Widget>[
+                        TodayStat(
+                          key: Key(
+                            context
+                                .watch<AuthModel>()
+                                .user!
+                                .selectedPenger!
+                                .id
+                                .toString(),
+                          ),
+                        ),
+                        MemberStat(
+                          key: Key(
+                            context
+                                .watch<AuthModel>()
+                                .user!
+                                .selectedPenger!
+                                .id
+                                .toString(),
+                          ),
+                        ),
                       ],
                     )
                   ],

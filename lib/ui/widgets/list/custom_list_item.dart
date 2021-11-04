@@ -30,12 +30,14 @@ class CustomListItem extends StatelessWidget {
               ),
             ),
             child: leading,
+            clipBehavior: Clip.hardEdge,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: content),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: content,
+            ),
           ),
         ],
       ),

@@ -42,6 +42,9 @@ BookingItem _$BookingItemFromJson(Map<String, dynamic> json) {
         ? null
         : PriorityOption.fromJson(
             json['priority_option'] as Map<String, dynamic>),
+    bookingCategory: json['category'] == null
+        ? null
+        : BookingCategory.fromJson(json['category'] as Map<String, dynamic>),
   );
 }
 
@@ -80,6 +83,7 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
   val['time_gap_units'] = _$TIME_GAP_UNITSEnumMap[instance.timeGapUnits];
   val['time_gap_value'] = instance.timeGapValue;
   val['priority_option'] = instance.priorityOption;
+  val['category'] = instance.bookingCategory;
   return val;
 }
 

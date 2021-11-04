@@ -21,3 +21,6 @@ const String MONEY_ICON_PATH = PREFIX_PATH + '/money.svg';
 const String ITEMS_ICON_PATH = PREFIX_PATH + '/items.svg';
 const String SELECTED_PENGER_ICON_PATH = PREFIX_PATH + '/selected_penger.svg';
 const String MEMBERS_ICON_PATH = PREFIX_PATH + '/members.svg';
+const String TODAY_ICON_PATH = PREFIX_PATH + '/today.svg';
+const String STATUS_ICON_PATH = PREFIX_PATH + '/status.svg';
+const String COUPON_STAT_ICON_PATH = PREFIX_PATH + '/coupon_stat.svg';

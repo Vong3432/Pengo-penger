@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:penger/const/locale_const.dart';
+import 'package:penger/models/booking_category_model.dart';
 import 'package:penger/models/geolocation_model.dart';
 import 'package:penger/models/priority_option_model.dart';
 
@@ -34,6 +35,7 @@ class BookingItem extends Equatable {
     this.description,
     this.geolocation,
     this.priorityOption,
+    this.bookingCategory,
   });
 
   factory BookingItem.fromJson(Map<String, dynamic> json) {
@@ -119,6 +121,9 @@ class BookingItem extends Equatable {
 
   @JsonKey(name: 'priority_option')
   final PriorityOption? priorityOption;
+
+  @JsonKey(name: 'category')
+  final BookingCategory? bookingCategory;
 
   @override
   // TODO: implement props
