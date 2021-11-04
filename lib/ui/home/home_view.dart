@@ -55,6 +55,9 @@ class _HomePageState extends State<HomePage> {
     /*24 is for notification bar on Android*/
     final double itemHeight = mediaQuery(context).size.height * 0.25;
     final double itemWidth = mediaQuery(context).size.width / 2;
+
+    final int? _selectedId =
+        context.watch<AuthModel>().user?.selectedPenger?.id;
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -82,24 +85,18 @@ class _HomePageState extends State<HomePage> {
                       crossAxisCount: 2,
                       children: <Widget>[
                         TodayStat(
-                          key: Key(
-                            context
-                                .watch<AuthModel>()
-                                .user!
-                                .selectedPenger!
-                                .id
-                                .toString(),
-                          ),
+                          key: _selectedId == null
+                              ? null
+                              : Key(
+                                  _selectedId.toString(),
+                                ),
                         ),
                         MemberStat(
-                          key: Key(
-                            context
-                                .watch<AuthModel>()
-                                .user!
-                                .selectedPenger!
-                                .id
-                                .toString(),
-                          ),
+                          key: _selectedId == null
+                              ? null
+                              : Key(
+                                  _selectedId.toString(),
+                                ),
                         ),
                       ],
                     )

@@ -54,13 +54,16 @@ class _MemberStatState extends State<MemberStat> {
             FutureBuilder<int>(
               future: PengerRepo().fetchTotalStaffStat(),
               builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SkeletonText(height: 18);
+                }
                 if (snapshot.hasData) {
                   return Text(
                     "${snapshot.data} staff",
                     style: PengoStyle.caption(context),
                   );
                 }
-                return const SkeletonText(height: 18);
+                return Container();
               },
             ),
           ],

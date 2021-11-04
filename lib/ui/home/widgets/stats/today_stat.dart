@@ -55,13 +55,17 @@ class _TodayStatState extends State<TodayStat> {
             FutureBuilder<int>(
               future: PengerRepo().fetchTotalBookingToday(),
               builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SkeletonText(height: 18);
+                }
+
                 if (snapshot.hasData) {
                   return Text(
                     "${snapshot.data} booking",
                     style: PengoStyle.caption(context),
                   );
                 }
-                return const SkeletonText(height: 18);
+                return Container();
               },
             ),
           ],
