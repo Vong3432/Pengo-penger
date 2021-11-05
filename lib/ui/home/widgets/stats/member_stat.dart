@@ -26,13 +26,11 @@ class _MemberStatState extends State<MemberStat> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context, rootNavigator: true)
-          .push(
-            CupertinoPageRoute(
-              builder: (BuildContext context) => StaffListPage(),
-            ),
-          )
-          .then((_) => setState(() {})),
+      onTap: () => Navigator.of(context, rootNavigator: true).push(
+        CupertinoPageRoute(
+          builder: (BuildContext context) => StaffListPage(),
+        ),
+      ),
       child: Stat(
         icon: SvgPicture.asset(
           MEMBERS_ICON_PATH,

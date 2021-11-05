@@ -20,6 +20,7 @@ import 'package:penger/ui/booking-item/add_item_view.dart';
 import 'package:penger/ui/booking-item/edit_item_view.dart';
 import 'package:penger/ui/home/widgets/current_penger_highlight.dart';
 import 'package:penger/ui/home/widgets/stats/member_stat.dart';
+import 'package:penger/ui/home/widgets/stats/schedule_stat.dart';
 import 'package:penger/ui/home/widgets/stats/today_stat.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
@@ -56,8 +57,6 @@ class _HomePageState extends State<HomePage> {
     final double itemHeight = mediaQuery(context).size.height * 0.25;
     final double itemWidth = mediaQuery(context).size.width / 2;
 
-    final int? _selectedId =
-        context.watch<AuthModel>().user?.selectedPenger?.id;
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -84,20 +83,9 @@ class _HomePageState extends State<HomePage> {
                       shrinkWrap: true,
                       crossAxisCount: 2,
                       children: <Widget>[
-                        TodayStat(
-                          key: _selectedId == null
-                              ? null
-                              : Key(
-                                  _selectedId.toString(),
-                                ),
-                        ),
-                        MemberStat(
-                          key: _selectedId == null
-                              ? null
-                              : Key(
-                                  _selectedId.toString(),
-                                ),
-                        ),
+                        TodayStat(),
+                        MemberStat(),
+                        ScheduleStat(),
                       ],
                     )
                   ],
