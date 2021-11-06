@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:penger/helpers/api/api_helper.dart';
+import 'package:penger/models/payout_model.dart';
 import 'package:penger/models/penger_model.dart';
 import 'package:penger/models/response_model.dart';
 
@@ -124,6 +125,50 @@ class PengerApiProvider {
       );
       final int totalStaff = response.data['data'] as int;
       return totalStaff;
+    } on DioError catch (e) {
+      throw e.response!.data['msg'].toString();
+    }
+  }
+
+  Future<String> getBankAcc() async {
+    try {
+      final response = await _apiHelper.get(
+        '/penger/bank-accounts',
+      );
+      final data = response.data['data'];
+      return data.toString();
+    } on DioError catch (e) {
+      throw e.response!.data['msg'].toString();
+    }
+  }
+
+  Future<void> saveBankAcc(String id) async {
+    try {
+      await _apiHelper.post('/penger/bank-accounts', data: {
+        "acc_id": id,
+      });
+    } on DioError catch (e) {
+      throw e.response!.data['msg'].toString();
+    }
+  }
+
+  Future<String> withdraw() async {
+    try {
+      final response = await _apiHelper.post('/penger/balances');
+      return response.data.toString();
+    } on DioError catch (e) {
+      throw e.response!.data['msg'].toString();
+    }
+  }
+
+  Future<Payout> fetchPayoutInfo() async {
+    try {
+      final response = await _apiHelper.get(
+        '/penger/balances',
+      );
+      final data = response.data['data'];
+      final Payout payout = Payout.fromJson(data as Map<String, dynamic>);
+      return payout;
     } on DioError catch (e) {
       throw e.response!.data['msg'].toString();
     }

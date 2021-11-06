@@ -1,5 +1,6 @@
 import 'package:image_picker/image_picker.dart';
 import 'package:penger/bloc/pengers/penger_api_provider.dart';
+import 'package:penger/models/payout_model.dart';
 import 'package:penger/models/penger_model.dart';
 import 'package:penger/models/response_model.dart';
 
@@ -60,4 +61,14 @@ class PengerRepo {
 
   Future<int> fetchTotalBookingToday() async =>
       _pengerApiProvider.fetchTotalBookingToday();
+
+  Future<Payout> fetchPayoutInfo() async =>
+      _pengerApiProvider.fetchPayoutInfo();
+
+  Future<String> getBankAcc() async => _pengerApiProvider.getBankAcc();
+
+  Future<void> saveBankAcc(String id) async =>
+      _pengerApiProvider.saveBankAcc(id);
+
+  Future<String> withdrawBalance() async => _pengerApiProvider.withdraw();
 }

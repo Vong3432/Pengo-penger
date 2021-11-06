@@ -19,6 +19,7 @@ import 'package:penger/models/providers/auth_model.dart';
 import 'package:penger/ui/booking-item/add_item_view.dart';
 import 'package:penger/ui/booking-item/edit_item_view.dart';
 import 'package:penger/ui/home/widgets/current_penger_highlight.dart';
+import 'package:penger/ui/home/widgets/stats/earning_stat.dart';
 import 'package:penger/ui/home/widgets/stats/member_stat.dart';
 import 'package:penger/ui/home/widgets/stats/schedule_stat.dart';
 import 'package:penger/ui/home/widgets/stats/today_stat.dart';
@@ -82,10 +83,11 @@ class _HomePageState extends State<HomePage> {
                       childAspectRatio: itemWidth / itemHeight,
                       shrinkWrap: true,
                       crossAxisCount: 2,
-                      children: <Widget>[
+                      children: const <Widget>[
                         TodayStat(),
                         MemberStat(),
                         ScheduleStat(),
+                        EarningStat(),
                       ],
                     )
                   ],

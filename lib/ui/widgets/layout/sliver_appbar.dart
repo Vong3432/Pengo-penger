@@ -11,6 +11,7 @@ class CustomSliverAppBar extends StatelessWidget {
     this.toolbarHeight,
     this.flexibleSpace,
     this.bottom,
+    this.bgColor,
   }) : super(key: key);
 
   final Widget title;
@@ -20,12 +21,13 @@ class CustomSliverAppBar extends StatelessWidget {
   final double? toolbarHeight;
   final List<Widget>? flexibleSpace;
   final PreferredSizeWidget? bottom;
+  final Color? bgColor;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       toolbarHeight: toolbarHeight ?? mediaQuery(context).size.height * 0.1,
-      backgroundColor: Colors.white,
+      backgroundColor: bgColor ?? Colors.white,
       pinned: pinned ?? true,
       centerTitle: centerTitle ?? false,
       elevation: 0,

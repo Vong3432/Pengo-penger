@@ -18,6 +18,7 @@ class PengoStyle {
   static TextStyle header(BuildContext context) {
     return Theme.of(context).textTheme.headline5!.copyWith(
           fontWeight: FontWeight.w700,
+          fontSize: 23,
         );
   }
 
@@ -29,10 +30,10 @@ class PengoStyle {
   }
 
   static TextStyle navigationTitle(BuildContext context) {
-    return Theme.of(context)
-        .textTheme
-        .headline1!
-        .copyWith(fontWeight: FontWeight.w800);
+    return Theme.of(context).textTheme.headline1!.copyWith(
+          fontWeight: FontWeight.w800,
+          fontSize: 32,
+        );
   }
 
   static TextStyle subtitle(BuildContext context) {
