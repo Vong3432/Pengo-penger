@@ -24,6 +24,8 @@ Coupon _$CouponFromJson(Map<String, dynamic> json) {
         ?.map((e) => BookingItem.fromJson(e as Map<String, dynamic>))
         .toList(),
     discountPercentage: (json['discount_percentage'] as num).toDouble(),
+    isScannable: json['is_scannable'] as bool,
+    isSelectable: json['is_selectable'] as bool,
   );
 }
 
@@ -38,6 +40,8 @@ Map<String, dynamic> _$CouponToJson(Coupon instance) => <String, dynamic>{
       'discount_percentage': instance.discountPercentage,
       'quantity': instance.quantity,
       'is_redeemable': instance.isRedeemable,
+      'is_scannable': instance.isScannable,
+      'is_selectable': instance.isSelectable,
       'only_to_items': instance.itemIds,
       'booking_items': instance.bookingItems,
     };

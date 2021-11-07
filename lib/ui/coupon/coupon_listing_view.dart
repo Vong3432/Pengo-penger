@@ -240,7 +240,7 @@ class _CouponPageState extends State<CouponPage>
         )),
       ),
       trailing: Text(
-        '${DateFormat("MMM d").format(DateTime.parse(coupon.validFrom))} - ${DateFormat("MMM d").format(DateTime.parse(coupon.validTo))}',
+        '${DateFormat("MMM d").format(DateTime.parse(coupon.validFrom).toLocal())} - ${DateFormat("MMM d").format(DateTime.parse(coupon.validTo).toLocal())}',
         style: PengoStyle.caption(context).copyWith(
           color: secondaryTextColor,
           fontWeight: FontWeight.w600,

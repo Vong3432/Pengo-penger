@@ -68,6 +68,9 @@ class _CouponViewPageState extends State<CouponViewPage> {
   late DateTime _startFrom;
   late DateTime _endAt;
   bool _isActive = false;
+  bool _isSelectable = true;
+  bool _isScannable = true;
+
   late List<BookingItem> _selectedItems = [];
   String _errRequiredMsg = "";
 
@@ -307,7 +310,49 @@ class _CouponViewPageState extends State<CouponViewPage> {
             },
           ),
           const SizedBox(
-            height: SECTION_GAP_HEIGHT,
+            height: 8,
+          ),
+          CheckboxListTile(
+            contentPadding: const EdgeInsets.all(0),
+            title: Text(
+              "Scannable",
+              style: PengoStyle.caption(context),
+            ),
+            subtitle: Text(
+              "Allow users to consume this coupon by scanning",
+              style: PengoStyle.text(context),
+            ),
+            value: _isScannable,
+            onChanged: (bool? val) {
+              if (val == null) return;
+              setState(() {
+                _isScannable = val;
+              });
+            },
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          CheckboxListTile(
+            contentPadding: const EdgeInsets.all(0),
+            title: Text(
+              "Selectable",
+              style: PengoStyle.caption(context),
+            ),
+            subtitle: Text(
+              "Allow users to apply this coupon during booking.",
+              style: PengoStyle.text(context),
+            ),
+            value: _isSelectable,
+            onChanged: (bool? val) {
+              if (val == null) return;
+              setState(() {
+                _isSelectable = val;
+              });
+            },
+          ),
+          const SizedBox(
+            height: SECTION_GAP_HEIGHT * 2,
           ),
           CustomTextField(
             readOnly: true,
@@ -485,6 +530,8 @@ class _CouponViewPageState extends State<CouponViewPage> {
                       ? double.parse(_requiredCreditPointsController.text)
                       : null,
               isRedeemable: _isActive,
+              isSelectable: _isSelectable,
+              isScannable: _isScannable,
             ),
           ),
         );
@@ -508,6 +555,8 @@ class _CouponViewPageState extends State<CouponViewPage> {
                       ? double.parse(_requiredCreditPointsController.text)
                       : null,
               isRedeemable: _isActive,
+              isScannable: _isScannable,
+              isSelectable: _isSelectable,
             ),
           ),
         );
@@ -536,6 +585,8 @@ class _CouponViewPageState extends State<CouponViewPage> {
         coupon.requiredCreditPoints?.toString() ?? '';
     setState(() {
       _isActive = coupon.isRedeemable;
+      _isSelectable = coupon.isSelectable;
+      _isScannable = coupon.isScannable;
       _selectedItems.addAll(coupon.bookingItems ?? []);
     });
   }

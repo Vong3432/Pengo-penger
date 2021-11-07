@@ -20,6 +20,8 @@ class Coupon {
     this.itemIds,
     this.bookingItems,
     required this.discountPercentage,
+    required this.isScannable,
+    required this.isSelectable,
     // required this.createdBy,
   });
 
@@ -73,6 +75,12 @@ class Coupon {
 
   @JsonKey(name: 'is_redeemable')
   final bool isRedeemable;
+
+  @JsonKey(name: 'is_scannable')
+  final bool isScannable;
+
+  @JsonKey(name: 'is_selectable')
+  final bool isSelectable;
 
   @JsonKey(name: 'only_to_items', fromJson: null)
   final List<int>? itemIds;
