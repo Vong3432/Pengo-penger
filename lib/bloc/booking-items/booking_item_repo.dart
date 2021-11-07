@@ -14,8 +14,9 @@ class BookingItemRepo {
   final BookingItemApiProvider _bookingItemApiProvider =
       BookingItemApiProvider();
 
-  Future<List<BookingItem>> fetchBookingItems({int? catId}) async =>
-      _bookingItemApiProvider.fetchBookingItems(catId: catId);
+  Future<List<BookingItem>> fetchBookingItems(
+          {int? catId, String? name}) async =>
+      _bookingItemApiProvider.fetchBookingItems(catId: catId, name: name);
 
   Future<BookingItem> fetchBookingItem({required int id}) async =>
       _bookingItemApiProvider.fetchBookingItem(id: id);

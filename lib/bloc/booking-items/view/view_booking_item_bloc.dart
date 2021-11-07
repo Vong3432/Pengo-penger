@@ -22,32 +22,22 @@ class ViewItemBloc extends Bloc<ViewBookingItemEvent, ViewBookingItemState> {
   ) async* {
     // TODO: implement mapEventToState
     if (event is FetchBookingItemsEvent) {
-      yield* _mapFetchItemsToState();
+      yield* _mapFetchItemsToState(catId: event.catId, name: event.name);
     }
     if (event is FetchBookingItemEvent) {
       yield* _mapFetchItem(event.itemId);
     }
-    if (event is FetchBookingItemsByCategoriesEvent) {
-      yield* _mapFetchItemsByCatToState(event.catId);
-    }
   }
 
-  Stream<ViewBookingItemState> _mapFetchItemsToState() async* {
+  Stream<ViewBookingItemState> _mapFetchItemsToState(
+      {int? catId, String? name}) async* {
     try {
       yield BookingItemsLoading();
-      final List<BookingItem> items = await _repo.fetchBookingItems();
+      final List<BookingItem> items = await _repo.fetchBookingItems(
+        catId: catId,
+        name: name,
+      );
       await Future.delayed(const Duration(seconds: 1));
-      yield BookingItemsLoaded(items);
-    } catch (_) {
-      yield BookingItemsNotLoaded();
-    }
-  }
-
-  Stream<ViewBookingItemState> _mapFetchItemsByCatToState(int catId) async* {
-    try {
-      yield BookingItemsLoading();
-      final List<BookingItem> items =
-          await _repo.fetchBookingItems(catId: catId);
       yield BookingItemsLoaded(items);
     } catch (_) {
       yield BookingItemsNotLoaded();

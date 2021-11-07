@@ -10,9 +10,14 @@ import 'package:penger/models/response_model.dart';
 class BookingItemApiProvider {
   final ApiHelper _apiHelper = ApiHelper();
 
-  Future<List<BookingItem>> fetchBookingItems({int? catId}) async {
+  Future<List<BookingItem>> fetchBookingItems(
+      {int? catId, String? name}) async {
     try {
-      final response = await _apiHelper.get('/penger/booking-items');
+      final response =
+          await _apiHelper.get('/penger/booking-items', queryParameters: {
+        "category_id": catId,
+        "name": name,
+      });
       final data = response.data['data'] as List;
       List<BookingItem> bookingItems = List<BookingItem>.from(
           data.map((i) => BookingItem.fromJson(i as Map<String, dynamic>)));

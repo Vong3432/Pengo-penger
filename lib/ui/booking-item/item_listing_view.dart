@@ -29,13 +29,20 @@ class ItemsPage extends StatefulWidget {
 class _ItemsPageState extends State<ItemsPage> {
   // state
   BookingCategory? _selectedCategory;
+  late TextEditingController _searchController;
+  // Timer? _debounce;
+
   GroupController controller = GroupController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    controller.listen((val) {
+      _onCategorySelected(val as BookingCategory);
+    });
     _loadCategories();
+    _searchController = TextEditingController();
   }
 
   void _loadCategories() {
@@ -57,7 +64,7 @@ class _ItemsPageState extends State<ItemsPage> {
             ),
             actions: [
               CupertinoButton(
-                child: const Text("Create item"),
+                child: const Icon(Icons.add),
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true)
                       .push(
@@ -81,11 +88,13 @@ class _ItemsPageState extends State<ItemsPage> {
                   // ignore: prefer_const_literals_to_create_immutables
                   children: <Widget>[
                     CupertinoSearchTextField(
+                      controller: _searchController,
                       onChanged: (String value) {
                         debugPrint('The text has changed to: $value');
                       },
                       onSubmitted: (String value) {
                         debugPrint('Submitted text: $value');
+                        _onSearch(value);
                       },
                     ),
                     const SizedBox(
@@ -227,7 +236,8 @@ class _ItemsPageState extends State<ItemsPage> {
           return SimpleGroupedChips<BookingCategory>(
             controller: controller,
             values: state.categories,
-            itemTitle: state.categories.map((e) => e.name).toList(),
+            itemTitle:
+                state.categories.map((BookingCategory e) => e.name).toList(),
             chipGroupStyle: ChipGroupStyle.minimize(
               backgroundColorItem: greyBgColor,
               selectedColorItem: primaryColor,
@@ -265,8 +275,29 @@ class _ItemsPageState extends State<ItemsPage> {
     );
   }
 
+  void _onCategorySelected(BookingCategory cat) {
+    setState(() {
+      _selectedCategory = cat;
+    });
+    _searchController.text = "";
+    debugPrint("cat");
+    BlocProvider.of<ViewItemBloc>(context).add(
+      FetchBookingItemsEvent(
+        catId: cat.id,
+      ),
+    );
+  }
+
+  void _onSearch(String val) {
+    BlocProvider.of<ViewItemBloc>(context).add(
+      FetchBookingItemsEvent(catId: _selectedCategory?.id, name: val),
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
+    _searchController.dispose();
+    // _debounce?.cancel();
   }
 }
