@@ -15,6 +15,7 @@ import 'package:penger/models/dpo_table_model.dart';
 
 /// Used as a state for adding/editing booking item.
 class BookingItemModel with ChangeNotifier {
+  bool _isActive = false;
   int? _id;
   int? _categoryId;
   bool _isPreserveable = false;
@@ -46,6 +47,13 @@ class BookingItemModel with ChangeNotifier {
   DpoTable? _dpoTable;
   Condition? _condition;
   String? _priorityValue;
+
+  bool get isActive => _isActive;
+
+  void setIsActive(bool val) {
+    _isActive = val;
+    notifyListeners();
+  }
 
   int? get id => _id;
 
@@ -264,6 +272,7 @@ class BookingItemModel with ChangeNotifier {
       "longitude": _lng,
       "name": _location,
     };
+    map["is_active"] = boolToInt(_isActive);
     map["is_preservable"] = boolToInt(_isPreserveable);
     map["is_transferable"] = boolToInt(_isTransferable);
     map["is_countable"] = boolToInt(_isCountable);
@@ -297,6 +306,7 @@ class BookingItemModel with ChangeNotifier {
 
   void setBookingItem(BookingItem item) {
     _id = item.id;
+    _isActive = item.isActive;
     _categoryId = item.categoryId;
     _isCountable = item.isCountable ?? false;
     _isTransferable = item.isTransferable ?? false;
@@ -345,6 +355,7 @@ class BookingItemModel with ChangeNotifier {
 
   void disposeBookingItemModel() {
     debugPrint("dispose");
+    _isActive = false;
     _categoryId = null;
     _isPreserveable = false;
     _isTransferable = false;

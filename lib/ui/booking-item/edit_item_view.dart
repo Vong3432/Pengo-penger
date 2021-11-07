@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -7,6 +8,7 @@ import 'package:penger/config/color.dart';
 import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
+import 'package:penger/helpers/toast/toast_helper.dart';
 import 'package:penger/models/booking_item_model.dart';
 import 'package:penger/models/providers/booking_item_model.dart';
 import 'package:penger/ui/booking-item/form_step_category.dart';
@@ -121,33 +123,77 @@ class _EditItemViewState extends State<EditItemView> {
     ];
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          CustomSliverAppBar(
-            title: Text(
-              "Edit",
-              style: PengoStyle.navigationTitle(context),
-            ),
-          ),
-          CustomSliverBody(content: <Widget>[
-            BlocConsumer<ViewItemBloc, ViewBookingItemState>(
-              listener: (BuildContext context, ViewBookingItemState state) {
-                if (state is BookingItemLoaded) {
-                  setDefaultValue(state.item);
-                }
-              },
-              builder: (BuildContext context, ViewBookingItemState state) {
-                if (state is BookingItemLoading) {
-                  return const LoadingWidget();
-                }
-                if (state is BookingItemLoaded) {
-                  return _buildItemInfo(_tiles);
-                }
-                return Container();
-              },
-            ),
-          ]),
-        ],
+      body: BlocConsumer<ViewItemBloc, ViewBookingItemState>(
+        listener: (BuildContext context, ViewBookingItemState state) {
+          // TODO: implement listener
+          if (state is BookingItemLoaded) {
+            setDefaultValue(state.item);
+          }
+        },
+        builder: (BuildContext context, ViewBookingItemState state) {
+          if (state is BookingItemLoading) {
+            return const LoadingWidget();
+          }
+          if (state is BookingItemLoaded) {
+            return CustomScrollView(
+              slivers: <Widget>[
+                CustomSliverAppBar(
+                  title: Text(
+                    "Edit",
+                    style: PengoStyle.navigationTitle(context),
+                  ),
+                  actions: <Widget>[
+                    CupertinoSwitch(
+                      value: context.watch<BookingItemModel>().isActive,
+                      onChanged: (bool value) async {
+                        try {
+                          await showCupertinoDialog<void>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                CupertinoAlertDialog(
+                              title: const Text('Alert'),
+                              content: Text(
+                                  '${context.watch<BookingItemModel>().isActive ? "Deactive" : "Reactive"} this item?'),
+                              actions: <CupertinoDialogAction>[
+                                CupertinoDialogAction(
+                                  child: const Text('No'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                CupertinoDialogAction(
+                                  isDestructiveAction: true,
+                                  onPressed: () {
+                                    // Do something destructive.
+                                    context
+                                        .read<BookingItemModel>()
+                                        .setIsActive(value);
+                                    _submit();
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Yes'),
+                                )
+                              ],
+                            ),
+                          );
+                        } catch (e) {
+                          showToast(msg: "Something went wrong");
+                        }
+                      },
+                    )
+                  ],
+                ),
+                CustomSliverBody(
+                  content: <Widget>[
+                    _buildItemInfo(_tiles),
+                  ],
+                ),
+              ],
+            );
+          }
+
+          return Container();
+        },
       ),
     );
   }
