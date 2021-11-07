@@ -45,4 +45,14 @@ class BookingRecordApiProvider {
       throw Exception((e as DioError).error);
     }
   }
+
+  Future<void> verifyBooking({required int id}) async {
+    try {
+      debugPrint("verify $id");
+      await _apiHelper.put('/penger/records/${id}');
+    } catch (e) {
+      debugPrint(e.toString());
+      throw Exception((e as DioError).error);
+    }
+  }
 }

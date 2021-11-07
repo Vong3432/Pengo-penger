@@ -1,12 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:penger/bloc/booking-records/booking_records_bloc.dart';
+import 'package:penger/bloc/booking-records/booking_records_repo.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
+import 'package:penger/helpers/toast/toast_helper.dart';
 import 'package:penger/models/user_model.dart';
 import 'package:penger/ui/widgets/api/loading.dart';
+import 'package:penger/ui/widgets/button/custom_button.dart';
 
 class BookingDetail extends StatefulWidget {
   const BookingDetail({Key? key, required this.id}) : super(key: key);
@@ -90,12 +94,26 @@ class _BookingDetailState extends State<BookingDetail> {
                           ),
                           ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: Icon(Icons.email),
+                            leading: const Icon(Icons.email),
                             title: Text(
                               user.email,
                               style: PengoStyle.body(context),
                             ),
                           ),
+                          const SizedBox(
+                            height: SECTION_GAP_HEIGHT,
+                          ),
+                          if (state.record.isUsed == false)
+                            CustomButton(
+                              onPressed: _confirmBooking,
+                              text: const Text("Verify manually"),
+                            )
+                          else
+                            CustomButton(
+                              text: const Text("Verified"),
+                              backgroundColor:
+                                  secondaryTextColor.withOpacity(0.5),
+                            )
                         ],
                       );
                     }
@@ -108,6 +126,45 @@ class _BookingDetailState extends State<BookingDetail> {
         ),
       ),
     );
+  }
+
+  Future<void> _confirmBooking() async {
+    await showCupertinoDialog<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Alert'),
+        content: const Text('Verify booking manually?'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            child: const Text('No'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoDialogAction(
+            child: const Text('Yes'),
+            isDestructiveAction: true,
+            onPressed: () {
+              // Do something destructive.
+              _verifyBooking();
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> _verifyBooking() async {
+    try {
+      await BookingRecordsRepo().verifyBooking(id: widget.id);
+      showToast(
+        msg: "Verified",
+        backgroundColor: successColor,
+      );
+    } catch (e) {
+      showToast(msg: "Something went wrong");
+    }
   }
 
   void _load() {

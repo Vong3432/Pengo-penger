@@ -10,9 +10,12 @@ import 'package:penger/models/booking_record_model.dart';
 import 'package:penger/ui/records/widgets/booking_detail_modal.dart';
 
 class BookingCard extends StatelessWidget {
-  const BookingCard({Key? key, required this.record}) : super(key: key);
+  const BookingCard(
+      {Key? key, required this.record, required this.refreshCallback})
+      : super(key: key);
 
   final BookingRecord record;
+  final VoidCallback refreshCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,7 @@ class BookingCard extends StatelessWidget {
           builder: (BuildContext context) => BookingDetail(
             id: record.id,
           ),
-        );
+        ).then((_) => refreshCallback());
         // Navigator.of(context, rootNavigator: true).pushNamed(
         //   "/booking-item",
         //   arguments: {

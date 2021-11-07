@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:penger/bloc/booking-records/booking_records_bloc.dart';
 import 'package:penger/config/color.dart';
-import 'package:penger/const/icon_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/booking_record_model.dart';
 import 'package:penger/ui/records/widgets/booking_card.dart';
 import 'package:penger/ui/widgets/api/loading.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
-import 'package:penger/ui/widgets/list/custom_list_item.dart';
 
 class BookingRecordsPage extends StatefulWidget {
   const BookingRecordsPage({Key? key}) : super(key: key);
@@ -31,7 +28,7 @@ class _BookingRecordsPageState extends State<BookingRecordsPage>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = TabController(vsync: this, length: 2);
+    _tabController = TabController(vsync: this, length: 3);
     _tabChanged(_tabIndex); // fetch at first load
   }
 
@@ -74,6 +71,7 @@ class _BookingRecordsPageState extends State<BookingRecordsPage>
                 children: <Widget>[
                   _todayView(),
                   _upcomingView(),
+                  _pastView(),
                 ],
               ),
             )
@@ -105,6 +103,7 @@ class _BookingRecordsPageState extends State<BookingRecordsPage>
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: BookingCard(
                         record: record,
+                        refreshCallback: () => _tabChanged(_tabIndex),
                       ),
                     );
                   },
@@ -140,6 +139,43 @@ class _BookingRecordsPageState extends State<BookingRecordsPage>
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: BookingCard(
                         record: record,
+                        refreshCallback: () => _tabChanged(_tabIndex),
+                      ),
+                    );
+                  },
+                );
+              }
+              return Container();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Container _pastView() {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      child: Column(
+        children: <Widget>[
+          BlocBuilder<BookingRecordsBloc, BookingRecordsState>(
+            builder: (BuildContext context, BookingRecordsState state) {
+              if (state is BookingRecordsLoading) {
+                return const LoadingWidget();
+              }
+              if (state is BookingRecordsLoaded) {
+                return ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: state.records.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final BookingRecord record = state.records[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: BookingCard(
+                        record: record,
+                        refreshCallback: () => _tabChanged(_tabIndex),
                       ),
                     );
                   },
@@ -174,6 +210,15 @@ class _BookingRecordsPageState extends State<BookingRecordsPage>
           ),
         );
         break;
+      case 2:
+        // show upcoming + today
+        _bloc.add(
+          const FetchBookingRecords(
+            showExpired: true,
+            showToday: false,
+          ),
+        );
+        break;
       default:
     }
     _tabIndex = index;
@@ -186,6 +231,9 @@ class _BookingRecordsPageState extends State<BookingRecordsPage>
       ),
       Tab(
         text: "Upcoming",
+      ),
+      Tab(
+        text: "Past",
       ),
     ];
   }

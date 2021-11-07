@@ -20,6 +20,8 @@ BookingRecord _$BookingRecordFromJson(Map<String, dynamic> json) {
     pengerID: json['penger_id'] as int,
     goocard: Goocard.fromJson(json['goocard'] as Map<String, dynamic>),
     groupDate: json['group_date'] as String,
+    isUsed: json['is_used'] as bool,
+    rewardPoint: (json['reward_point'] as num).toDouble(),
   );
 }
 
@@ -33,6 +35,8 @@ Map<String, dynamic> _$BookingRecordToJson(BookingRecord instance) =>
       'book_time': instance.bookTime,
       'book_date': instance.bookDate,
       'item': instance.item,
+      'reward_point': instance.rewardPoint,
+      'is_used': instance.isUsed,
     };
 
 BookDate _$BookDateFromJson(Map<String, dynamic> json) {

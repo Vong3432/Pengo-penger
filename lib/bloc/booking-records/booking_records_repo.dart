@@ -20,4 +20,7 @@ class BookingRecordsRepo {
 
   Future<BookingRecord> fetchRecord({required int id}) async =>
       _bookingRecordApiProvider.fetchBookingRecord(id: id);
+
+  Future<void> verifyBooking({required int id}) async =>
+      _bookingRecordApiProvider.verifyBooking(id: id);
 }
