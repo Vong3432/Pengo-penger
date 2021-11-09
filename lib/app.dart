@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/const/icon_const.dart';
 import 'package:penger/helpers/notification/push_notification_manager.dart';
@@ -25,6 +26,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   void _onBottomNavItemTapped(int idx) {
+    // same path
+    if (idx == _selectedIndex && idx != 2) return;
+
     switch (idx) {
       case 0:
         // home
@@ -37,8 +41,13 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case 2:
         // history
-        _navigatorKey.currentState!
-            .pushNamedAndRemoveUntil('/scan', (_) => false);
+        showCupertinoModalBottomSheet(
+          useRootNavigator: true,
+          context: context,
+          builder: (BuildContext context) {
+            return const QRScannerPage();
+          },
+        );
         break;
       case 3:
         // history
@@ -118,9 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 break;
               case '/coupons':
                 builder = (BuildContext context) => CouponPage();
-                break;
-              case '/scan':
-                builder = (BuildContext context) => QRScannerPage();
                 break;
               case '/items':
                 builder = (BuildContext context) => ItemsPage();

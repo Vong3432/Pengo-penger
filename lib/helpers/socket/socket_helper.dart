@@ -30,7 +30,10 @@ class SocketHelper {
       socket = io(uri, <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': false,
+        'forceNew': true,
       });
+
+      debugPrint("socket init before ${socket.connected}");
 
       // Connect to websocket
       socket.connect();
@@ -47,8 +50,4 @@ class SocketHelper {
   }
 
   Socket get getSocket => socket;
-
-  void dispose() {
-    socket.dispose();
-  }
 }

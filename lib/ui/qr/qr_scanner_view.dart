@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/helpers/api/api_helper.dart';
 import 'package:penger/helpers/socket/socket_helper.dart';
+import 'package:penger/helpers/toast/toast_helper.dart';
 import 'package:penger/providers/scan_pass_provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:socket_io_client/src/socket.dart';
@@ -209,7 +210,6 @@ class _QRScannerPageState extends State<QRScannerPage> {
     Barcode? result = _scanListener.getResult();
 
     if (result == null) return;
-
     final record = jsonDecode(result.code);
 
     final Map<String, String> fd = {
@@ -236,35 +236,29 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
     instance.on("verified success", (data) {
       debugPrint('success');
-      _showToast(successColor, (data["msg"] ?? "Verified").toString());
+      showToast(
+        msg: (data["msg"] ?? "Verified").toString(),
+        backgroundColor: successColor,
+      );
+      Navigator.pop(context);
     });
 
     instance.on("verified failed", (data) {
       debugPrint('failed');
-      _showToast(successColor, (data["msg"] ?? "Verified failed").toString());
+      showToast(msg: (data["msg"] ?? "Verified").toString());
     });
 
     instance.on("unauthorized", (data) {
       debugPrint('unauthorized');
-      _showToast(successColor, "unauthorized");
+      showToast(msg: "unauthorized".toString());
     });
-  }
-
-  void _showToast(Color color, String msg) {
-    Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.white,
-        textColor: Colors.black,
-        fontSize: 16.0);
   }
 
   @override
   void dispose() {
     controller?.dispose();
     // _socketHelper.dispose();
+    _socketHelper.getSocket.disconnect();
     super.dispose();
   }
 }
