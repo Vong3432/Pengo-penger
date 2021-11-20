@@ -137,31 +137,6 @@ class ProfilePage extends StatelessWidget {
                 color: primaryLightColor,
                 borderRadius: BorderRadius.circular(5)),
             padding: const EdgeInsets.all(8),
-            child: SvgPicture.asset(COUPON_ICON_PATH, fit: BoxFit.scaleDown),
-          ),
-          content: <Widget>[
-            Text(
-              "My rewards",
-              style: PengoStyle.title2(context),
-            ),
-            Text(
-              "View vouchers",
-              style: PengoStyle.smallerText(context)
-                  .copyWith(color: grayTextColor),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: SECTION_GAP_HEIGHT,
-        ),
-        CustomListItem(
-          leading: Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-                color: primaryLightColor,
-                borderRadius: BorderRadius.circular(5)),
-            padding: const EdgeInsets.all(8),
             child: SvgPicture.asset(REPORT_ICON_PATH, fit: BoxFit.scaleDown),
           ),
           content: <Widget>[
