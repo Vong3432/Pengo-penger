@@ -174,30 +174,30 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
         ),
         "func": (bool v) => context.read<BookingItemModel>().setCountable(v)
       },
-      {
-        "title": "Has discount",
-        "value": context.watch<BookingItemModel>().discountable,
-        "widget": CustomTextField(
-          label: 'Discount amount (MYR)',
-          lblStyle: PengoStyle.caption(context),
-          inputType: const TextInputType.numberWithOptions(
-            signed: true,
-            decimal: true,
-          ),
-          hintText: '10',
-          controller: _discountController,
-          decoration: InputDecoration(prefixText: currency),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 18),
-          onChanged: (String v) {
-            if (double.tryParse(v) == null) return;
+      // {
+      //   "title": "Has discount",
+      //   "value": context.watch<BookingItemModel>().discountable,
+      //   "widget": CustomTextField(
+      //     label: 'Discount amount (MYR)',
+      //     lblStyle: PengoStyle.caption(context),
+      //     inputType: const TextInputType.numberWithOptions(
+      //       signed: true,
+      //       decimal: true,
+      //     ),
+      //     hintText: '10',
+      //     controller: _discountController,
+      //     decoration: InputDecoration(prefixText: currency),
+      //     contentPadding: const EdgeInsets.symmetric(horizontal: 18),
+      //     onChanged: (String v) {
+      //       if (double.tryParse(v) == null) return;
 
-            context
-                .read<BookingItemModel>()
-                .setDiscountAmount(double.tryParse(v)!);
-          },
-        ),
-        "func": (bool v) => context.read<BookingItemModel>().setDiscountable(v)
-      },
+      //       context
+      //           .read<BookingItemModel>()
+      //           .setDiscountAmount(double.tryParse(v)!);
+      //     },
+      //   ),
+      //   "func": (bool v) => context.read<BookingItemModel>().setDiscountable(v)
+      // },
     ];
 
     return Material(
@@ -271,12 +271,12 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
                           "Start from",
                           style: PengoStyle.title2(context),
                         ),
-                        Text(
-                          "(optional)",
-                          style: PengoStyle.caption(context).copyWith(
-                            color: secondaryTextColor,
-                          ),
-                        ),
+                        // Text(
+                        //   "(optional)",
+                        //   style: PengoStyle.caption(context).copyWith(
+                        //     color: secondaryTextColor,
+                        //   ),
+                        // ),
                       ],
                     ),
                     const Spacer(),
@@ -311,12 +311,12 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
                           "End at",
                           style: PengoStyle.title2(context),
                         ),
-                        Text(
-                          "(optional)",
-                          style: PengoStyle.caption(context).copyWith(
-                            color: secondaryTextColor,
-                          ),
-                        ),
+                        // Text(
+                        //   "(optional)",
+                        //   style: PengoStyle.caption(context).copyWith(
+                        //     color: secondaryTextColor,
+                        //   ),
+                        // ),
                       ],
                     ),
                     const Spacer(),
