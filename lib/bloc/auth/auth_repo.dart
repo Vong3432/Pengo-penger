@@ -1,9 +1,6 @@
-import 'dart:io';
-
+import 'package:image_picker/image_picker.dart';
 import 'package:penger/bloc/auth/auth_api_provider.dart';
-import 'package:penger/bloc/pengers/penger_api_provider.dart';
 import 'package:penger/models/auth_model.dart';
-import 'package:penger/models/penger_model.dart';
 
 class AuthRepo {
   factory AuthRepo() {
@@ -23,7 +20,24 @@ class AuthRepo {
     String password,
     String username,
     String email,
-    File avatar,
+    XFile avatar,
   ) async =>
       _authApiProvider.register(phone, password, username, email, avatar);
+
+  Future<Auth> updateProfile({
+    required int userId,
+    String? phone,
+    String? password,
+    String? username,
+    String? email,
+    XFile? avatar,
+  }) async =>
+      _authApiProvider.updateProfile(
+        userId: userId,
+        phone: phone,
+        password: password,
+        username: username,
+        email: email,
+        avatar: avatar,
+      );
 }

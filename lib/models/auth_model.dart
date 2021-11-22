@@ -18,6 +18,7 @@ class Auth extends Equatable {
     this.phone,
     this.token,
     this.avatar,
+    this.email,
   });
 
   Auth copyWith({
@@ -28,6 +29,7 @@ class Auth extends Equatable {
       user: user,
       tokenData: tokenData,
       pengers: pengers ?? this.pengers,
+      email: email,
       selectedPenger: selectedPenger ?? this.selectedPenger,
       avatar: avatar,
       phone: phone,
@@ -44,6 +46,7 @@ class Auth extends Equatable {
         t.selectedPenger = t.pengers![0];
       }
     }
+    t.email = t.user.email;
     t.token = t.tokenData.token;
     t.phone = t.user.phone;
     t.username = t.user.username;
@@ -54,6 +57,8 @@ class Auth extends Equatable {
   Map<String, dynamic> toJson() => _$AuthToJson(this);
 
   String? phone;
+
+  String? email;
 
   String? avatar;
 

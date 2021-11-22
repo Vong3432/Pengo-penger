@@ -7,6 +7,7 @@ import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/models/providers/auth_model.dart';
 import 'package:penger/ui/auth/login_view.dart';
+import 'package:penger/ui/profile/edit_profile.dart';
 import 'package:penger/ui/profile/profile_info.dart';
 import 'package:penger/ui/profile/setting_view.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
@@ -105,6 +106,13 @@ class ProfilePage extends StatelessWidget {
           height: SECTION_GAP_HEIGHT,
         ),
         CustomListItem(
+          onTap: () {
+            Navigator.of(context, rootNavigator: true).push(
+              CupertinoPageRoute(
+                builder: (BuildContext context) => const EditProfilePage(),
+              ),
+            );
+          },
           leading: Container(
             width: 42,
             height: 42,
@@ -219,6 +227,7 @@ class ProfilePage extends StatelessWidget {
               width: SECTION_GAP_HEIGHT,
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(

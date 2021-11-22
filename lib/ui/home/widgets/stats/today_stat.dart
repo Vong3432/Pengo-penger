@@ -7,7 +7,6 @@ import 'package:penger/const/icon_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/ui/home/widgets/stats/stat.dart';
 import 'package:penger/ui/records/booking_records_view.dart';
-import 'package:penger/ui/staff/staff_list_page.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
 class TodayStat extends StatefulWidget {
@@ -47,7 +46,7 @@ class _TodayStatState extends State<TodayStat> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              "Total",
+              "Total today",
               style: PengoStyle.captionNormal(context).copyWith(
                 color: secondaryTextColor,
               ),

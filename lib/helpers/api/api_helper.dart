@@ -51,6 +51,8 @@ class ApiHelper {
             };
           }
 
+          debugPrint("request url: ${request.path}");
+
           // debugPrint("sh $prefs");
           // debugPrint("qs ${request.queryParameters.toString()}");
         }
