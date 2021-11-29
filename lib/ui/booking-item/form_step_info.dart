@@ -119,9 +119,28 @@ class _FormStepInfoState extends State<FormStepInfo> {
                         return;
                       }
                     }),
+                CheckboxListTile(
+                  contentPadding: const EdgeInsets.all(0),
+                  title: Text(
+                    "Is virtual",
+                    style: PengoStyle.title2(context),
+                  ),
+                  subtitle: Text(
+                    "This item is related to virtual meeting.",
+                    style: PengoStyle.text(context),
+                  ),
+                  value: context.watch<BookingItemModel>().isVirtual,
+                  onChanged: (bool? val) {
+                    context.read<BookingItemModel>().setIsVirtual(val!);
+                  },
+                ),
+                const SizedBox(
+                  height: SECTION_GAP_HEIGHT,
+                ),
                 CustomTextField(
                   label: "Location",
                   hintText: "",
+                  isOptional: context.watch<BookingItemModel>().isVirtual,
                   sideNote: Text(
                       "Selected location: ${context.watch<BookingItemModel>().location}"),
                   controller: _locationController,

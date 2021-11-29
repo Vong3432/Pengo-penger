@@ -19,7 +19,8 @@ Auth _$AuthFromJson(Map<String, dynamic> json) {
     username: json['username'] as String?,
     phone: json['phone'] as String?,
     avatar: json['avatar'] as String?,
-  )..email = json['email'] as String?;
+    email: json['email'] as String?,
+  );
 }
 
 Map<String, dynamic> _$AuthToJson(Auth instance) => <String, dynamic>{

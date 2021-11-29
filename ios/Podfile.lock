@@ -117,6 +117,10 @@ PODS:
     - GoogleUtilities/Logger
   - image_picker (0.0.1):
     - Flutter
+  - jitsi_meet (0.0.1):
+    - Flutter
+    - JitsiMeetSDK (= 3.3.0)
+  - JitsiMeetSDK (3.3.0)
   - MTBBarcodeScanner (5.0.11)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
@@ -143,6 +147,7 @@ DEPENDENCIES:
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - jitsi_meet (from `.symlinks/plugins/jitsi_meet/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
 
@@ -158,6 +163,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleMaps
     - GoogleUtilities
+    - JitsiMeetSDK
     - MTBBarcodeScanner
     - nanopb
     - PromisesObjC
@@ -184,6 +190,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  jitsi_meet:
+    :path: ".symlinks/plugins/jitsi_meet/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   shared_preferences:
@@ -210,6 +218,8 @@ SPEC CHECKSUMS:
   GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
   GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
   image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
+  jitsi_meet: a797e5ffdbc1da9d424c52b1bfe3b2a803b05e31
+  JitsiMeetSDK: 3b1d3757f2166b28cd03f907b47091db064302b3
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
@@ -217,6 +227,6 @@ SPEC CHECKSUMS:
   shared_preferences: 5033afbb22d372e15aff8ff766df9021b845f273
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: 7384a8f6e4d0e37341dbaf5d346db4d15f8545c8
+PODFILE CHECKSUM: 25153a8f3930844f3bd8bf31b56ca19af4a5cf77
 
 COCOAPODS: 1.11.2

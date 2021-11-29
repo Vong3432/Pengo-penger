@@ -98,6 +98,7 @@ class _FormStepCategoryState extends State<FormStepCategory> {
                     backgroundColor: primaryLightColor,
                     selected: isSelected,
                     onSelected: (bool v) {
+                      context.read<BookingItemModel>().setCategory(cat);
                       context.read<BookingItemModel>().setCategoryId(cat.id!);
                     },
                   );

@@ -173,6 +173,7 @@ class _ItemsPageState extends State<ItemsPage> {
                           clipBehavior: Clip.hardEdge,
                           child: Image.network(
                             item.poster,
+                            width: double.infinity,
                             height: 140,
                             fit: BoxFit.cover,
                           ),

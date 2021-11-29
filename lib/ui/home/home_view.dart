@@ -4,20 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 import 'package:penger/bloc/booking-categories/view/view_booking_category_bloc.dart';
 import 'package:penger/bloc/booking-items/view/view_booking_item_bloc.dart';
-import 'package:penger/config/color.dart';
-import 'package:penger/const/icon_const.dart';
 import 'package:penger/const/space_const.dart';
-import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/booking_category_model.dart';
-import 'package:penger/models/booking_item_model.dart';
-import 'package:penger/models/providers/auth_model.dart';
-import 'package:penger/ui/booking-item/add_item_view.dart';
-import 'package:penger/ui/booking-item/edit_item_view.dart';
 import 'package:penger/ui/home/widgets/current_penger_highlight.dart';
 import 'package:penger/ui/home/widgets/stats/earning_stat.dart';
 import 'package:penger/ui/home/widgets/stats/member_stat.dart';
@@ -25,7 +16,6 @@ import 'package:penger/ui/home/widgets/stats/schedule_stat.dart';
 import 'package:penger/ui/home/widgets/stats/today_stat.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:penger/ui/widgets/layout/sliver_body.dart';
-import 'package:skeleton_animation/skeleton_animation.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

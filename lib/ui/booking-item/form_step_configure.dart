@@ -5,17 +5,18 @@ import 'package:intl/intl.dart';
 import 'package:penger/config/color.dart';
 import 'package:penger/const/locale_const.dart';
 import 'package:penger/const/space_const.dart';
-import 'package:penger/helpers/intl/currency_converter.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/condition_model.dart';
 import 'package:penger/models/dpo_column_model.dart';
 import 'package:penger/models/dpo_table_model.dart';
 import 'package:penger/models/providers/booking_item_model.dart';
+import 'package:penger/models/system_function_model.dart';
 import 'package:penger/ui/priority-option/widgets/priority_field.dart';
 import 'package:penger/ui/widgets/button/custom_button.dart';
 import 'package:penger/ui/widgets/input/custom_textfield.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 class FormStepConfigure extends StatefulWidget {
   const FormStepConfigure({
@@ -126,22 +127,22 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
       //   "value": ,
       //   "widget": Container(),
       // },
-      {
-        "title": "Transferable",
-        "subtitle": "Allow people transfer their slot.",
-        "value": context.watch<BookingItemModel>().transferable,
-        "widget": CustomTextField(
-          label: 'Maximum transfer',
-          lblStyle: PengoStyle.caption(context),
-          inputType: TextInputType.number,
-          hintText: '0',
-          controller: _transferController,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 18),
-          onChanged: (String v) =>
-              context.read<BookingItemModel>().setMaxTransfer(int.tryParse(v)!),
-        ),
-        "func": (bool v) => context.read<BookingItemModel>().setTransferable(v)
-      },
+      // {
+      //   "title": "Transferable",
+      //   "subtitle": "Allow people transfer their slot.",
+      //   "value": context.watch<BookingItemModel>().transferable,
+      //   "widget": CustomTextField(
+      //     label: 'Maximum transfer',
+      //     lblStyle: PengoStyle.caption(context),
+      //     inputType: TextInputType.number,
+      //     hintText: '0',
+      //     controller: _transferController,
+      //     contentPadding: const EdgeInsets.symmetric(horizontal: 18),
+      //     onChanged: (String v) =>
+      //         context.read<BookingItemModel>().setMaxTransfer(int.tryParse(v)!),
+      //   ),
+      //   "func": (bool v) => context.read<BookingItemModel>().setTransferable(v)
+      // },
       {
         "title": "Countable",
         "subtitle": "Maximum book for each time slot.",
@@ -199,6 +200,15 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
       //   "func": (bool v) => context.read<BookingItemModel>().setDiscountable(v)
       // },
     ];
+
+    final SystemFunction? noTimeFunc = context
+        .watch<BookingItemModel>()
+        .category
+        ?.bookingOptions
+        ?.firstWhereOrNull(
+          (SystemFunction element) =>
+              element.name == "Fixed timeslot" && element.isActive == true,
+        );
 
     return Material(
       child: GestureDetector(
@@ -339,49 +349,59 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: SECTION_GAP_HEIGHT * 2,
-                ),
-                Text(
-                  "Time gap (Units)",
-                  style: PengoStyle.title2(context),
-                ),
-                SizedBox(
-                  height: 70,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: TIME_GAP_UNIT_LIST.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        TIME_GAP_UNITS unit = TIME_GAP_UNIT_LIST[index];
-                        final bool isSelected = unit ==
-                            context.watch<BookingItemModel>().timeGapUnits;
-                        return ChoiceChip(
-                          label: Text(
-                            unit.toString().split('.').last,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: isSelected ? whiteColor : primaryColor),
-                          ),
-                          selectedColor: primaryColor,
-                          backgroundColor: primaryLightColor,
-                          selected: isSelected,
-                          onSelected: (bool v) {
-                            context
-                                .read<BookingItemModel>()
-                                .setTimeGapUnit(unit);
-                          },
-                        );
-                      }),
-                ),
-                const SizedBox(
-                  height: SECTION_GAP_HEIGHT,
-                ),
-                CustomTextField(
-                  controller: _timeGapValueController,
-                  hintText: "1, 5, 10",
-                  label: "Time gap (Value)",
-                ),
+                if (noTimeFunc == null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const SizedBox(
+                        height: SECTION_GAP_HEIGHT * 2,
+                      ),
+                      Text(
+                        "Time gap (Units)",
+                        style: PengoStyle.title2(context),
+                      ),
+                      SizedBox(
+                        height: 70,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: TIME_GAP_UNIT_LIST.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              TIME_GAP_UNITS unit = TIME_GAP_UNIT_LIST[index];
+                              final bool isSelected = unit ==
+                                  context
+                                      .watch<BookingItemModel>()
+                                      .timeGapUnits;
+                              return ChoiceChip(
+                                label: Text(
+                                  unit.toString().split('.').last,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: isSelected
+                                          ? whiteColor
+                                          : primaryColor),
+                                ),
+                                selectedColor: primaryColor,
+                                backgroundColor: primaryLightColor,
+                                selected: isSelected,
+                                onSelected: (bool v) {
+                                  context
+                                      .read<BookingItemModel>()
+                                      .setTimeGapUnit(unit);
+                                },
+                              );
+                            }),
+                      ),
+                      const SizedBox(
+                        height: SECTION_GAP_HEIGHT,
+                      ),
+                      CustomTextField(
+                        controller: _timeGapValueController,
+                        hintText: "1, 5, 10",
+                        label: "Time gap (Value)",
+                      ),
+                    ],
+                  ),
                 const SizedBox(
                   height: SECTION_GAP_HEIGHT * 2,
                 ),

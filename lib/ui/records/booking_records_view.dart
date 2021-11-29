@@ -69,9 +69,9 @@ class _BookingRecordsPageState extends State<BookingRecordsPage>
                 physics: const NeverScrollableScrollPhysics(),
                 controller: _tabController,
                 children: <Widget>[
-                  _todayView(),
-                  _upcomingView(),
-                  _pastView(),
+                  SingleChildScrollView(child: _todayView()),
+                  SingleChildScrollView(child: _upcomingView()),
+                  SingleChildScrollView(child: _pastView()),
                 ],
               ),
             )
@@ -153,7 +153,7 @@ class _BookingRecordsPageState extends State<BookingRecordsPage>
     );
   }
 
-  Container _pastView() {
+  Widget _pastView() {
     return Container(
       padding: const EdgeInsets.all(18),
       child: Column(
@@ -196,7 +196,7 @@ class _BookingRecordsPageState extends State<BookingRecordsPage>
         // show today
         _bloc.add(
           const FetchBookingRecords(
-            showExpired: false,
+            showExpired: true,
             showToday: true,
           ),
         );

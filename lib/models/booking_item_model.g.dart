@@ -45,6 +45,7 @@ BookingItem _$BookingItemFromJson(Map<String, dynamic> json) {
     bookingCategory: json['category'] == null
         ? null
         : BookingCategory.fromJson(json['category'] as Map<String, dynamic>),
+    isVirtual: json['is_virtual'] as bool?,
   );
 }
 
@@ -71,6 +72,7 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) {
   val['is_transferable'] = instance.isTransferable;
   val['is_countable'] = instance.isCountable;
   val['is_discountable'] = instance.isDiscountable;
+  val['is_virtual'] = instance.isVirtual;
   val['maximum_transfer'] = instance.maxTransfer;
   val['maximum_book'] = instance.maxBook;
   val['preserved_book'] = instance.preservedBook;

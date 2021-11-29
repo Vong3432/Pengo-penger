@@ -44,8 +44,10 @@
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access to scan QR codes</string>
+	<string>This app needs camera access to scan QR codes and video call</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs gallery access to upload booking item poster</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your microphone for video call.</string>
 </dict>
 </plist>

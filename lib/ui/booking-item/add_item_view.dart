@@ -183,7 +183,8 @@ class _AddItemViewState extends State<AddItemView> {
     return _isStepOneCompleted() &&
         context.watch<BookingItemModel>().name.isNotEmpty &&
         context.watch<BookingItemModel>().poster != null &&
-        context.watch<BookingItemModel>().location.isNotEmpty;
+        (context.watch<BookingItemModel>().location.isNotEmpty ||
+            context.watch<BookingItemModel>().isVirtual == true);
   }
 
   bool _isStepThreeCompleted() {

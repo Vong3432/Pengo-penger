@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -7,12 +8,17 @@ import 'package:penger/const/space_const.dart';
 import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/booking_record_model.dart';
+import 'package:penger/models/providers/auth_model.dart';
 import 'package:penger/ui/records/widgets/booking_detail_modal.dart';
+import 'package:penger/ui/video/video_meet.dart';
+import 'package:provider/src/provider.dart';
 
 class BookingCard extends StatelessWidget {
-  const BookingCard(
-      {Key? key, required this.record, required this.refreshCallback})
-      : super(key: key);
+  const BookingCard({
+    Key? key,
+    required this.record,
+    required this.refreshCallback,
+  }) : super(key: key);
 
   final BookingRecord record;
   final VoidCallback refreshCallback;
@@ -83,6 +89,27 @@ class BookingCard extends StatelessWidget {
               fSd: fSd,
               fEd: fEd,
             ),
+            if (context.watch<AuthModel>().user != null &&
+                record.item?.isVirtual == true)
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    CupertinoPageRoute(
+                      builder: (BuildContext context) {
+                        return VideoMeetPage(
+                          user: context.watch<AuthModel>().user!,
+                          subject: record.item!.title,
+                          roomName: DateFormat("yyyy-MM-dd HH:mm")
+                              .format(record.formattedBookDateTime!),
+                        );
+                      },
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.video_call,
+                ),
+              ),
           ],
         ),
       ),

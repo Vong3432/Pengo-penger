@@ -22,6 +22,9 @@ BookingRecord _$BookingRecordFromJson(Map<String, dynamic> json) {
     groupDate: json['group_date'] as String,
     isUsed: json['is_used'] as bool,
     rewardPoint: (json['reward_point'] as num).toDouble(),
+    formattedBookDateTime: json['formatted_book_datetime'] == null
+        ? null
+        : DateTime.parse(json['formatted_book_datetime'] as String),
   );
 }
 
@@ -37,6 +40,8 @@ Map<String, dynamic> _$BookingRecordToJson(BookingRecord instance) =>
       'item': instance.item,
       'reward_point': instance.rewardPoint,
       'is_used': instance.isUsed,
+      'formatted_book_datetime':
+          instance.formattedBookDateTime?.toIso8601String(),
     };
 
 BookDate _$BookDateFromJson(Map<String, dynamic> json) {

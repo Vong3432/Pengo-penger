@@ -18,6 +18,7 @@ class BookingRecord {
     required this.groupDate,
     required this.isUsed,
     required this.rewardPoint,
+    required this.formattedBookDateTime,
   });
 
   factory BookingRecord.fromJson(Map<String, dynamic> json) =>
@@ -51,6 +52,9 @@ class BookingRecord {
 
   @JsonKey(name: 'is_used')
   final bool isUsed;
+
+  @JsonKey(name: 'formatted_book_datetime')
+  final DateTime? formattedBookDateTime;
 }
 
 @JsonSerializable()

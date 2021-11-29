@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:penger/const/locale_const.dart';
 import 'package:penger/helpers/formatter/bool_to_int.dart';
+import 'package:penger/models/booking_category_model.dart';
 import 'package:penger/models/booking_item_model.dart';
 import 'package:penger/models/condition_model.dart';
 import 'package:penger/models/dpo_column_model.dart';
@@ -22,6 +23,7 @@ class BookingItemModel with ChangeNotifier {
   bool _isTransferable = false;
   bool _isCountable = false;
   bool _isDiscountable = false;
+  bool _isVirtual = false;
   String _name = "";
   String _description = "";
   double? _price;
@@ -43,10 +45,18 @@ class BookingItemModel with ChangeNotifier {
   TIME_GAP_UNITS _timeGapUnits = TIME_GAP_UNITS.minutes; // default: Minutes
   int _timeGapValue = 5; // default: 5
 
+  BookingCategory? _category;
   DpoColumn? _dpoCol;
   DpoTable? _dpoTable;
   Condition? _condition;
   String? _priorityValue;
+
+  bool get isVirtual => _isVirtual;
+
+  void setIsVirtual(bool val) {
+    _isVirtual = val;
+    notifyListeners();
+  }
 
   bool get isActive => _isActive;
 
@@ -175,6 +185,13 @@ class BookingItemModel with ChangeNotifier {
 
   int? get categoryId => _categoryId;
 
+  void setCategory(BookingCategory v) {
+    _category = v;
+    notifyListeners();
+  }
+
+  BookingCategory? get category => _category;
+
   void setPreservable(bool v) {
     _isPreserveable = v;
     notifyListeners();
@@ -267,17 +284,21 @@ class BookingItemModel with ChangeNotifier {
       map["poster"] = await MultipartFile.fromFile(_poster!.path,
           filename: _poster!.name, contentType: MediaType("image", "png"));
     }
-    map["geolocation"] = {
-      "latitude": _lat,
-      "longitude": _lng,
-      "name": _location,
-    };
+
+    if (_lat != null && _lng != null && _location.isNotEmpty) {
+      map["geolocation"] = {
+        "latitude": _lat,
+        "longitude": _lng,
+        "name": _location,
+      };
+    }
     map["description"] = _description;
     map["is_active"] = boolToInt(_isActive);
     map["is_preservable"] = boolToInt(_isPreserveable);
     map["is_transferable"] = boolToInt(_isTransferable);
     map["is_countable"] = boolToInt(_isCountable);
     map["is_discountable"] = boolToInt(_isDiscountable);
+    map["is_virtual"] = boolToInt(_isVirtual);
     map["quantity"] = _quantity;
     map["discount_amount"] = _discountAmount;
     map["credit_points"] = _creditPoints;
@@ -328,6 +349,7 @@ class BookingItemModel with ChangeNotifier {
     _isTransferable = item.isTransferable ?? false;
     _isCountable = item.isCountable ?? false;
     _isDiscountable = item.isDiscountable ?? false;
+    _isVirtual = item.isVirtual ?? false;
 
     if (item.location != null) {
       _location = item.location!;
@@ -358,6 +380,7 @@ class BookingItemModel with ChangeNotifier {
     debugPrint("dispose");
     _isActive = false;
     _categoryId = null;
+    _isVirtual = false;
     _isPreserveable = false;
     _isTransferable = false;
     _isCountable = false;

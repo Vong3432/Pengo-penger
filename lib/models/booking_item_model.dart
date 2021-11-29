@@ -36,6 +36,7 @@ class BookingItem extends Equatable {
     this.geolocation,
     this.priorityOption,
     this.bookingCategory,
+    this.isVirtual,
   });
 
   factory BookingItem.fromJson(Map<String, dynamic> json) {
@@ -86,6 +87,9 @@ class BookingItem extends Equatable {
 
   @JsonKey(name: 'is_discountable')
   final bool? isDiscountable;
+
+  @JsonKey(name: 'is_virtual')
+  final bool? isVirtual;
 
   @JsonKey(name: 'maximum_transfer')
   final int? maxTransfer;
