@@ -396,10 +396,16 @@ class _FormStepConfigureState extends State<FormStepConfigure> {
                         height: SECTION_GAP_HEIGHT,
                       ),
                       CustomTextField(
-                        controller: _timeGapValueController,
-                        hintText: "1, 5, 10",
-                        label: "Time gap (Value)",
-                      ),
+                          controller: _timeGapValueController,
+                          hintText: "1, 5, 10",
+                          label: "Time gap (Value)",
+                          inputType: TextInputType.number,
+                          onChanged: (String v) {
+                            // clear prev if have
+                            context
+                                .read<BookingItemModel>()
+                                .setTimeGapValue(int.tryParse(v)!);
+                          }),
                     ],
                   ),
                 const SizedBox(
