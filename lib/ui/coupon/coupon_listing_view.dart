@@ -11,6 +11,7 @@ import 'package:penger/helpers/theme/custom_font.dart';
 import 'package:penger/helpers/theme/theme_helper.dart';
 import 'package:penger/models/coupon_model.dart';
 import 'package:penger/ui/coupon/coupon_view.dart';
+import 'package:penger/ui/widgets/api/loading.dart';
 import 'package:penger/ui/widgets/layout/sliver_appbar.dart';
 import 'package:skeleton_animation/skeleton_animation.dart';
 
@@ -123,64 +124,52 @@ class _CouponPageState extends State<CouponPage>
   Container _expiredTabBarView() {
     return Container(
       padding: const EdgeInsets.all(18),
-      child: Column(children: <Widget>[
-        BlocConsumer<ViewExpiredCouponsBloc, ViewExpiredCouponsState>(
-            builder: (BuildContext context, ViewExpiredCouponsState state) {
-          if (state is ViewExpiredCouponsLoading) {
-            return Container(
-              width: double.infinity,
-              child: const SkeletonText(height: 20),
-            );
-          }
-          if (state is ViewExpiredCouponsLoaded) {
-            return _buildCouponsList(state.coupons);
-          }
-          return Container();
-        }, listener: (BuildContext context, ViewExpiredCouponsState state) {
-          if (state is ViewExpiredCouponsLoadedFailed) {
-            Fluttertoast.showToast(
-                msg: state.e.toString(),
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.TOP,
-                backgroundColor: dangerColor,
-                textColor: whiteColor,
-                fontSize: 16.0);
-          }
-        })
-      ]),
+      child: BlocConsumer<ViewExpiredCouponsBloc, ViewExpiredCouponsState>(
+          builder: (BuildContext context, ViewExpiredCouponsState state) {
+        if (state is ViewExpiredCouponsLoading) {
+          return const LoadingWidget();
+        }
+        if (state is ViewExpiredCouponsLoaded) {
+          return _buildCouponsList(state.coupons);
+        }
+        return Container();
+      }, listener: (BuildContext context, ViewExpiredCouponsState state) {
+        if (state is ViewExpiredCouponsLoadedFailed) {
+          Fluttertoast.showToast(
+              msg: state.e.toString(),
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.TOP,
+              backgroundColor: dangerColor,
+              textColor: whiteColor,
+              fontSize: 16.0);
+        }
+      }),
     );
   }
 
   Container _activeTabBarView() {
     return Container(
       padding: const EdgeInsets.all(18),
-      child: Column(
-        children: [
-          BlocConsumer<ViewActiveCouponsBloc, ViewActiveCouponsState>(
-              builder: (BuildContext context, ViewActiveCouponsState state) {
-            if (state is ViewActiveCouponsLoading) {
-              return Container(
-                width: double.infinity,
-                child: const SkeletonText(height: 20),
-              );
-            }
-            if (state is ViewActiveCouponsLoaded) {
-              return _buildCouponsList(state.coupons);
-            }
-            return Container();
-          }, listener: (BuildContext context, ViewActiveCouponsState state) {
-            if (state is ViewActiveCouponsLoadedFailed) {
-              Fluttertoast.showToast(
-                  msg: state.e.toString(),
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.TOP,
-                  backgroundColor: dangerColor,
-                  textColor: whiteColor,
-                  fontSize: 16.0);
-            }
-          })
-        ],
-      ),
+      child: BlocConsumer<ViewActiveCouponsBloc, ViewActiveCouponsState>(
+          builder: (BuildContext context, ViewActiveCouponsState state) {
+        if (state is ViewActiveCouponsLoading) {
+          return const LoadingWidget();
+        }
+        if (state is ViewActiveCouponsLoaded) {
+          return _buildCouponsList(state.coupons);
+        }
+        return Container();
+      }, listener: (BuildContext context, ViewActiveCouponsState state) {
+        if (state is ViewActiveCouponsLoadedFailed) {
+          Fluttertoast.showToast(
+              msg: state.e.toString(),
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.TOP,
+              backgroundColor: dangerColor,
+              textColor: whiteColor,
+              fontSize: 16.0);
+        }
+      }),
     );
   }
 
