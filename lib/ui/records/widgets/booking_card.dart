@@ -18,10 +18,12 @@ class BookingCard extends StatelessWidget {
     Key? key,
     required this.record,
     required this.refreshCallback,
+    this.isExpired = false,
   }) : super(key: key);
 
   final BookingRecord record;
   final VoidCallback refreshCallback;
+  final bool isExpired;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class BookingCard extends StatelessWidget {
           context: context,
           builder: (BuildContext context) => BookingDetail(
             id: record.id,
+            isExpired: isExpired,
           ),
         ).then((_) => refreshCallback());
         // Navigator.of(context, rootNavigator: true).pushNamed(

@@ -175,6 +175,7 @@ class _BookingRecordsPageState extends State<BookingRecordsPage>
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: BookingCard(
                         record: record,
+                        isExpired: true,
                         refreshCallback: () => _tabChanged(_tabIndex),
                       ),
                     );

@@ -13,9 +13,14 @@ import 'package:penger/ui/widgets/api/loading.dart';
 import 'package:penger/ui/widgets/button/custom_button.dart';
 
 class BookingDetail extends StatefulWidget {
-  const BookingDetail({Key? key, required this.id}) : super(key: key);
+  const BookingDetail({
+    Key? key,
+    required this.id,
+    this.isExpired = false,
+  }) : super(key: key);
 
   final int id;
+  final bool isExpired;
 
   @override
   _BookingDetailState createState() => _BookingDetailState();
@@ -58,6 +63,7 @@ class _BookingDetailState extends State<BookingDetail> {
                     }
                     if (state is BookingRecordLoaded) {
                       final User user = state.record.goocard.user;
+
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -103,11 +109,13 @@ class _BookingDetailState extends State<BookingDetail> {
                           const SizedBox(
                             height: SECTION_GAP_HEIGHT,
                           ),
-                          if (state.record.isUsed == false)
+                          if (state.record.isUsed == false && !widget.isExpired)
                             CustomButton(
                               onPressed: _confirmBooking,
                               text: const Text("Verify manually"),
                             )
+                          else if (widget.isExpired)
+                            Container()
                           else
                             CustomButton(
                               text: const Text("Verified"),
