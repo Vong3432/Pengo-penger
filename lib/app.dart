@@ -68,12 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  final List<String> _icons = <String>[
-    HOME_ICON_PATH,
-    COUPON_ICON_PATH,
-    SCAN_ICON_PATH,
-    ITEMS_ICON_PATH,
-    PROFILE_ICON_PATH,
+  final List<Map<String, String>> _icons = <Map<String, String>>[
+    <String, String>{"label": "Home", "path": HOME_ICON_PATH},
+    <String, String>{"label": "Coupon", "path": COUPON_ICON_PATH},
+    <String, String>{"label": "Scan", "path": SCAN_ICON_PATH},
+    <String, String>{"label": "My items", "path": ITEMS_ICON_PATH},
+    <String, String>{"label": "Profile", "path": PROFILE_ICON_PATH},
   ];
 
   @override
@@ -123,16 +123,16 @@ class _MyHomePageState extends State<MyHomePage> {
             // Manage your route names here
             switch (settings.name) {
               case '/':
-                builder = (BuildContext context) => HomePage();
+                builder = (BuildContext context) => const HomePage();
                 break;
               case '/coupons':
-                builder = (BuildContext context) => CouponPage();
+                builder = (BuildContext context) => const CouponPage();
                 break;
               case '/items':
-                builder = (BuildContext context) => ItemsPage();
+                builder = (BuildContext context) => const ItemsPage();
                 break;
               case '/profile':
-                builder = (BuildContext context) => ProfilePage();
+                builder = (BuildContext context) => const ProfilePage();
                 break;
               default:
                 throw Exception('Invalid route: ${settings.name}');
@@ -153,9 +153,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ? primaryColor
               : textColor.withOpacity(0.5);
           return BottomNavigationBarItem(
-            label: "",
+            label: _icons[index]["label"],
             icon: SvgPicture.asset(
-              _icons[index],
+              _icons[index]["path"]!,
               color: color,
               width: 23,
               height: 23,
@@ -164,8 +164,8 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         }),
         elevation: 17,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
         backgroundColor: whiteColor,
         currentIndex: _selectedIndex,
