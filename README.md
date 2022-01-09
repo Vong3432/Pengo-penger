@@ -8,6 +8,9 @@
 <small><i>The actual booking app.</i></small>
 </p> -->
 
+### Video demo
+- https://youtu.be/EOd6GbxzcF8
+
 ### Commands
 
 1. Generate JSON serializable files
