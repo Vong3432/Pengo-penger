@@ -25,6 +25,7 @@ class CustomTextField extends StatelessWidget {
     this.onSaved,
     this.onTap,
     this.onEditingComplete,
+    this.maxLines,
   }) : super(key: key);
 
   final String? label;
@@ -45,6 +46,7 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final bool? isOptional;
   final Text? sideNote;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +78,7 @@ class CustomTextField extends StatelessWidget {
             height: 10,
           ),
         TextFormField(
+          maxLines: maxLines ?? 1,
           onTap: onTap,
           onEditingComplete: onEditingComplete,
           controller: controller,

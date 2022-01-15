@@ -79,6 +79,8 @@ class _FormStepInfoState extends State<FormStepInfo> {
                   label: "Description",
                   controller: _descriptionController,
                   isOptional: true,
+                  maxLines: 3,
+                  inputAction: TextInputAction.newline,
                   hintText: "Limited sales for August",
                   onChanged: (String v) =>
                       context.read<BookingItemModel>().setDescription(v),
