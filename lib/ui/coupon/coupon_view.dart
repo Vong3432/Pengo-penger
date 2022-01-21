@@ -312,27 +312,27 @@ class _CouponViewPageState extends State<CouponViewPage> {
           const SizedBox(
             height: 8,
           ),
-          CheckboxListTile(
-            contentPadding: const EdgeInsets.all(0),
-            title: Text(
-              "Scannable",
-              style: PengoStyle.caption(context),
-            ),
-            subtitle: Text(
-              "Allow users to consume this coupon by scanning",
-              style: PengoStyle.text(context),
-            ),
-            value: _isScannable,
-            onChanged: (bool? val) {
-              if (val == null) return;
-              setState(() {
-                _isScannable = val;
-              });
-            },
-          ),
-          const SizedBox(
-            height: 8,
-          ),
+          // CheckboxListTile(
+          //   contentPadding: const EdgeInsets.all(0),
+          //   title: Text(
+          //     "Scannable",
+          //     style: PengoStyle.caption(context),
+          //   ),
+          //   subtitle: Text(
+          //     "Allow users to consume this coupon by scanning",
+          //     style: PengoStyle.text(context),
+          //   ),
+          //   value: _isScannable,
+          //   onChanged: (bool? val) {
+          //     if (val == null) return;
+          //     setState(() {
+          //       _isScannable = val;
+          //     });
+          //   },
+          // ),
+          // const SizedBox(
+          //   height: 8,
+          // ),
           CheckboxListTile(
             contentPadding: const EdgeInsets.all(0),
             title: Text(
