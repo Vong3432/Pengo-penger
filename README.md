@@ -8,6 +8,9 @@
 <small><i>The actual booking app.</i></small>
 </p> -->
 
+### Notes
+This project is in Phaseout stage and no longer maintained.
+
 ### Video demo
 - https://youtu.be/EOd6GbxzcF8
 
