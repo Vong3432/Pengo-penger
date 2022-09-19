@@ -1,8 +1,6 @@
 import 'package:checkbox_grouped/checkbox_grouped.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:penger/bloc/booking-categories/view/view_booking_category_bloc.dart';
@@ -29,7 +27,7 @@ class ItemsPage extends StatefulWidget {
 class _ItemsPageState extends State<ItemsPage> {
   // state
   BookingCategory? _selectedCategory;
-  late TextEditingController _searchController;
+  final TextEditingController _searchController = TextEditingController();
   // Timer? _debounce;
 
   GroupController controller = GroupController();
@@ -38,11 +36,7 @@ class _ItemsPageState extends State<ItemsPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller.listen((val) {
-      _onCategorySelected(val as BookingCategory);
-    });
     _loadCategories();
-    _searchController = TextEditingController();
   }
 
   void _loadCategories() {
@@ -236,6 +230,9 @@ class _ItemsPageState extends State<ItemsPage> {
         if (state is BookingCategoriesLoaded) {
           return SimpleGroupedChips<BookingCategory>(
             controller: controller,
+            onItemSelected: (category) {
+              _onCategorySelected(category as BookingCategory);
+            },
             values: state.categories,
             itemTitle:
                 state.categories.map((BookingCategory e) => e.name).toList(),
@@ -280,6 +277,7 @@ class _ItemsPageState extends State<ItemsPage> {
     setState(() {
       _selectedCategory = cat;
     });
+
     _searchController.text = "";
     debugPrint("cat");
     BlocProvider.of<ViewItemBloc>(context).add(

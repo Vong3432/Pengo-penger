@@ -193,6 +193,7 @@ class BookingItemModel with ChangeNotifier {
   BookingCategory? get category => _category;
 
   void setPreservable(bool v) {
+    print(v);
     _isPreserveable = v;
     notifyListeners();
   }
@@ -316,11 +317,13 @@ class BookingItemModel with ChangeNotifier {
     map["time_gap_units"] = _timeGapUnits.toString().split('.').last;
     map["time_gap_value"] = _timeGapValue;
 
-    map["priority_option"] = {
-      "dpo_col_id": _dpoCol?.id,
-      "value": _priorityValue,
-      "condition": _condition?.symbolValue
-    };
+    if (_isPreserveable) {
+      map["priority_option"] = {
+        "dpo_col_id": _dpoCol?.id,
+        "value": _priorityValue ?? "",
+        "condition": _condition?.symbolValue
+      };
+    }
 
     // Add all other fields
     return map;

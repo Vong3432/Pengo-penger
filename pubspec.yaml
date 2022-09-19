@@ -27,7 +27,7 @@ dependencies:
   animated_bottom_navigation_bar: ^0.3.2
   animations: ^2.0.1
   change_app_package_name: ^1.0.0
-  checkbox_grouped: ^1.6.0
+  checkbox_grouped: ^1.8.1
   cupertino_icons: ^1.0.2
   dio: ^4.0.0
   equatable: ^2.0.3

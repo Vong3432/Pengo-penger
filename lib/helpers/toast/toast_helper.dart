@@ -11,7 +11,7 @@ void showToast({
 }) {
   Fluttertoast.showToast(
     msg: msg,
-    toastLength: toast ?? Toast.LENGTH_SHORT,
+    toastLength: toast ?? Toast.LENGTH_LONG,
     gravity: gravity ?? ToastGravity.BOTTOM,
     backgroundColor: backgroundColor ?? dangerColor,
     textColor: textColor ?? whiteColor,
