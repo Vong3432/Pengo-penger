@@ -30,7 +30,10 @@ class BookingCloseDate {
   final int? keyId;
 
   final CloseDateType type;
-  final String from;
-  final String to;
+  @JsonKey(name: 'from')
+  final DateTime? from;
+
+  @JsonKey(name: 'to')
+  final DateTime? to;
   final String name;
 }

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:intl/intl.dart';
 import 'package:penger/config/theme.dart';
 import 'package:penger/helpers/notification/push_notification_manager.dart';
 import 'package:penger/models/providers/auth_model.dart';
@@ -17,6 +18,7 @@ import 'package:provider/provider.dart';
 
 // ignore: avoid_void_async
 void main() async {
+
   await dotenv.load(fileName: ".env");
   // initializeJsonMapper();
   WidgetsFlutterBinding.ensureInitialized();

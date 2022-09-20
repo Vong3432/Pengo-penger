@@ -66,8 +66,8 @@ class _CloseDateFormState extends State<CloseDateForm> {
     }
 
     _nameController = TextEditingController(text: widget.date?.name ?? "");
-    _fromController = TextEditingController(text: widget.date?.from ?? "");
-    _toController = TextEditingController(text: widget.date?.to ?? "");
+    _fromController = TextEditingController(text: widget.date != null ? DateFormat("yyyy-MM-dd").format(widget.date!.from!.add(const Duration(days: 1)).toLocal()) : "");
+    _toController = TextEditingController(text: widget.date != null ? DateFormat("yyyy-MM-dd").format(widget.date!.to!.add(const Duration(days: 1)).toLocal()) : "");
   }
 
   @override

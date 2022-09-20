@@ -11,8 +11,8 @@ BookingCloseDate _$BookingCloseDateFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     id: json['id'] as int?,
     pengerId: json['penger_id'] as int?,
-    from: json['from'] as String,
-    to: json['to'] as String,
+    from: json['from'] == null ? null : DateTime.parse(json['from'] as String),
+    to: json['to'] == null ? null : DateTime.parse(json['to'] as String),
     keyId: json['key_id'] as int?,
     type: _$enumDecode(_$CloseDateTypeEnumMap, json['type']),
   );
@@ -24,8 +24,8 @@ Map<String, dynamic> _$BookingCloseDateToJson(BookingCloseDate instance) =>
       'penger_id': instance.pengerId,
       'key_id': instance.keyId,
       'type': _$CloseDateTypeEnumMap[instance.type],
-      'from': instance.from,
-      'to': instance.to,
+      'from': instance.from?.toIso8601String(),
+      'to': instance.to?.toIso8601String(),
       'name': instance.name,
     };
 

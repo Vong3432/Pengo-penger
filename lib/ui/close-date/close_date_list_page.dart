@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:penger/bloc/booking-close-dates/booking_close_date_bloc.dart';
 import 'package:penger/bloc/staff/staff_bloc.dart';
@@ -110,8 +111,9 @@ class _CloseDateListPageState extends State<CloseDateListPage> {
                                     date.name,
                                     style: PengoStyle.title2(context),
                                   ),
+                                  // FIXME: Maybe changes db column type?
                                   subtitle: Text(
-                                    "${date.from} to ${date.to}",
+                                    "${DateFormat("yyyy-MM-dd").format(date.from!.add(const Duration(days: 1)).toLocal())} to ${DateFormat("yyyy-MM-dd").format(date.to!.add(const Duration(days: 1)).toLocal())}",
                                     style: PengoStyle.captionNormal(context)
                                         .copyWith(
                                       color: secondaryTextColor,

@@ -194,7 +194,7 @@ class _ItemsPageState extends State<ItemsPage> {
       return Row(
         children: <Widget>[
           Text(
-            "${DateFormat.yMd().format(item.startFrom!)} - ${DateFormat.yMd().format(item.endAt!)}",
+            "${DateFormat.yMd().format(item.startFrom!.toLocal())} - ${DateFormat.yMd().format(item.endAt!.toLocal())}",
             style: PengoStyle.caption(context).copyWith(
               fontSize: 12,
               color: secondaryTextColor,
